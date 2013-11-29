@@ -11,9 +11,7 @@ Run 2 containers:
 	sudo docker run -i -t aecc/stream-tree-learning:[Version] /bin/bash
 
 In one container run the streamer:
-
-scripts/start_streamer.sh <port> 
+	scripts/start_streamer.sh <port> 
 
 In other container run the application (it will compile automatically):
-
-sbt "run local[2] <ip-streamer> <port-streamer>"
+	sbt "run local[2] <ip-streamer> <port-streamer>"
