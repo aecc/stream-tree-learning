@@ -1,0 +1,11 @@
+[0m[[0minfo[0m] [0mPackaging /home/target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar ...[0m
+[0m[[0mdebug[0m] [0mInput file mappings:[0m
+[0m[[0mdebug[0m] [0m	StreamTreeLearning$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  /home/target/scala-2.9.3/classes/StreamTreeLearning$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	StreamTreeLearning$.class[0m
+[0m[[0mdebug[0m] [0m	  /home/target/scala-2.9.3/classes/StreamTreeLearning$.class[0m
+[0m[[0mdebug[0m] [0m	StreamTreeLearning$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	  /home/target/scala-2.9.3/classes/StreamTreeLearning$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	StreamTreeLearning.class[0m
+[0m[[0mdebug[0m] [0m	  /home/target/scala-2.9.3/classes/StreamTreeLearning.class[0m
+[0m[[0minfo[0m] [0mDone packaging.[0m
