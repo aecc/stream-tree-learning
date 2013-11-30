@@ -3,6 +3,11 @@ stream-tree-learning
 
 Distributed Decision Tree Prediction of Streaming Data using Spark
 
+CHANGE LOG
+----------
+
+It's now split in modules to work in a collaborative way
+
 
 TO RUN THE APPLICATION:
 ----------------------
