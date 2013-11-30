@@ -1,7 +1,7 @@
 /*
  * Main class of the stream
  */
-class Stream (DStream reddits_stream) {
+class Stream (reddits_stream: DStream) {
 	
 	val reddits = reddits_stream
 	
