@@ -13,7 +13,7 @@ TO RUN THE APPLICATION:
 ----------------------
 
 Run 2 containers:
-	sudo docker run -i -t aecc/stream-tree-learning:[Version] /bin/bash
+	sudo docker run -i -t aecc/stream-tree-learning /bin/bash
 
 In one container run the streamer:
 	scripts/start_streamer.sh <port> 
