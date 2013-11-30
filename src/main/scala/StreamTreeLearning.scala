@@ -48,6 +48,7 @@ object StreamTreeLearning {
 		// We need an action to begin the process
 		filtered.print()
 		
+		// This is a test
 		// Data will be in this format now (scala tuple)
 		// (image_id, (unixtime, title, total_votes, number_of_comments, username, number_of_times_reposted))
 		// (10003,(1321941344,and who says technology has to be boring?,127,11,irishjack777,5))
