@@ -8,6 +8,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object StreamTreeLearning {
   
 	def main(args: Array[String]) {
+	  
 		if (args.length < 3) {
 			System.err.println("Usage: StreamTreeLearning <master> <ip-stream> <port>")
 			System.exit(1)
@@ -16,12 +17,27 @@ object StreamTreeLearning {
 		val ssc = new StreamingContext(args(0), "StreamTreeLearning", Seconds(2),
 		System.getenv("SPARK_HOME"), List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"))
 
-		val lines = ssc.socketTextStream(args(1), args(2).toInt)
-			
+		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
+		val stream = new Stream(reddits)
+		stream.filter()
+		
+		// Start the computation
+		ssc.start()
+
+	}
+
+}
+
+class Stream (DStream reddits_stream) {
+	
+	val reddits = reddits_stream
+	
+	def filter() {
+	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), number_of_comments = columns(11), username = columns(12)
 	
-		val filtered = lines.map( line => {
+		val filtered = reddits.map( line => {
 								val nline = line + " "
 								val splitted = nline.split("\"")
 								val nline2 = nline.replaceFirst("\".*\"","")
@@ -48,14 +64,10 @@ object StreamTreeLearning {
 		// We need an action to begin the process
 		filtered.print()
 		
-		// This is a test 5
 		// Data will be in this format now (scala tuple)
 		// (image_id, (unixtime, title, total_votes, number_of_comments, username, number_of_times_reposted))
 		// (10003,(1321941344,and who says technology has to be boring?,127,11,irishjack777,5))
-
-		// Start the computation
-		ssc.start()
-
-		}
-
+	  
+	}
+  
 }
