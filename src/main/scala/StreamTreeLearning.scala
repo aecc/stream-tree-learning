@@ -18,8 +18,7 @@ object StreamTreeLearning {
 		System.getenv("SPARK_HOME"), List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"))
 
 		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
-		val stream = new Stream(reddits)
-		stream.filter()
+		val filtered = FilterProcess.filter(reddits)
 		
 		// Start the computation
 		ssc.start()

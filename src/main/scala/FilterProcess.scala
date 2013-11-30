@@ -7,13 +7,11 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.DStream
 
 /*
- * Main class of the stream
+ * Main object for filter
  */
-class Stream (reddits_stream: DStream) {
+object FilterProcess {
 	
-	val reddits = reddits_stream
-	
-	def filter() {
+	def filter(reddits: DStream[String]): DStream[(Any,Any)] {
 	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), number_of_comments = columns(11), username = columns(12)
@@ -44,6 +42,7 @@ class Stream (reddits_stream: DStream) {
 	
 		// We need an action to begin the process
 		filtered.print()
+		filtered
 		
 		// Data will be in this format now (scala tuple)
 		// (image_id, (unixtime, title, total_votes, number_of_comments, username, number_of_times_reposted))
