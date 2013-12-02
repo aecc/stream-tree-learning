@@ -24,7 +24,10 @@ object TreeBuilding {
 																																					
 	}
 	
-	def classify() {
+	def classify(attrib:Set, classes:Set):(Set) = {
+
+		
+
 				
 	}
 	
