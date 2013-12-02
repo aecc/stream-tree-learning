@@ -15,7 +15,7 @@ object FilterProcess {
 	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), number_of_comments = columns(11), username = columns(12)
-	
+			
 		val filtered = reddits.map( line => {
 								val nline = line + " "
 								val splitted = nline.split("\"")

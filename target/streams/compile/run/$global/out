@@ -1,4 +1,4 @@
-[0m[[0minfo[0m] [0mRunning StreamTreeLearning local[2] 172.17.0.22 1234[0m
+[0m[[0minfo[0m] [0mRunning StreamTreeLearning local[2] 172.17.0.46 1234[0m
 [0m[[0mdebug[0m] [0mStarting sandboxed run...[0m
 [0m[[0mdebug[0m] [0mWaiting for threads to exit or System.exit to be called.[0m
 [0m[[0mdebug[0m] [0m  Classpath:[0m
@@ -101,5 +101,3 @@
 [0m[[0mdebug[0m] [0m	/root/.ivy2/cache/org.apache.spark/spark-mllib_2.9.3/jars/spark-mllib_2.9.3-0.8.0-incubating.jar[0m
 [0m[[0mdebug[0m] [0m	/root/.ivy2/cache/org.jblas/jblas/jars/jblas-1.2.3.jar[0m
 [0m[[0mdebug[0m] [0mWaiting for thread run-main to exit[0m
-[0m[[0mdebug[0m] [0m	Thread run-main exited.[0m
-[0m[[0mdebug[0m] [0mWaiting for thread Thread-33 to exit[0m

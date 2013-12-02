@@ -9,7 +9,8 @@ import org.apache.spark.streaming.DStream
 
 
 object TreeBuilding {
-
+	
+	/*
 	def growthTree(trainset: DStream[string], attribset:Set):(Set) = {
 		
 					
@@ -37,6 +38,6 @@ object TreeBuilding {
 
 
     }																																		
-
+	*/
 
 }
