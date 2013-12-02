@@ -1,0 +1,3 @@
+/*
+* Entropy calculation module
+*/
