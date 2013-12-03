@@ -17,8 +17,12 @@ object StreamTreeLearning {
 
 		val logger = Logger.getLogger(getClass().getName());
 		logger.info("Logger is working!")
-		val ssc = new StreamingContext(args(0), "StreamTreeLearning", Seconds(2),
-		System.getenv("SPARK_HOME"), List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"))
+		val ssc = new StreamingContext(	args(0), 
+										"StreamTreeLearning", 
+										Seconds(2), 
+										System.getenv("SPARK_HOME"), 
+										List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"),
+										Map())
 
 		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
 		val filtered = FilterProcess.filter(reddits)
