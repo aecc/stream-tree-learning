@@ -4,6 +4,7 @@
  * They should be represented by numbers asigned to the string here available
  */
 class ClassesSet(names: Array[String]) {
+
 	private val this.names = names
 	val size = names.length;
 	
