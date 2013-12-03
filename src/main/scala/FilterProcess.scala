@@ -46,9 +46,9 @@ object FilterProcess {
 		filtered.print()
 		
 		// Data to RETURN will be in this format now (scala tuple)
-		// (image_id, Array(words in title, total_votes, number_of_comments, score),unixtime, number_of_times_reposted, class value))
-		// Image_id, Array(number of words, attention, engagement, rating), unixtime, number of times reposted, class value
-		// (10003,(Array(8,127,11,10),1321941344,5,1))
+		// (image_id, Vector(words in title, total_votes, number_of_comments, score),unixtime, number_of_times_reposted, class value))
+		// Image_id, Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value
+		// (10003,(Vector(8,127,11,10),1321941344,5,1))
 		filtered
 	  
 	}
