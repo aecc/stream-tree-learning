@@ -11,7 +11,7 @@ import org.apache.spark.streaming.DStream
  */
 object FilterProcess {
 	
-	def filter(reddits: DStream[String], k_parameter: Int): DStream[(Int, (Array[Int], Int, Int, Int))] = {
+	def filter(reddits: DStream[String], k_parameter: Int): DStream[(Int, (Vector[Int], Int, Int, Int))] = {
 	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), score = columns(10), number_of_comments = columns(11), username = columns(12)
@@ -22,9 +22,9 @@ object FilterProcess {
 				val nline2 = nline.replaceFirst("\".*\"","")
 				val columns = nline2.split(",")	
 				if (columns.length!=15) 
-					(0,(Array(0,0,0,0),0,0,0))
+					(0,(Vector(0,0,0,0),0,0,0))
 				else
-					(columns(0).toInt,(Array(
+					(columns(0).toInt,(Vector(
 							 if (splitted.length!=1)
 								splitted(1).split(" ").length
 							 else
@@ -37,9 +37,9 @@ object FilterProcess {
 							 1))
 		}).reduceByKey( (l1,l2) => {
 				if (l1._3<l2._3) 
-					(Array(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1) 
+					(Vector(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1) 
 				else 
-					(Array(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1)
+					(Vector(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1)
 		}).filter(entry => if (entry._1 != 0) true else false)
 	
 		// We need an action to begin the process

@@ -10,6 +10,8 @@ object StreamTreeLearning {
   
 	def main(args: Array[String]) {
 	  
+		// Parameter to decide if post is reposted or no more then k times
+		val k_parameter = 7
 		if (args.length < 3) {
 			System.err.println("Usage: StreamTreeLearning <master> <ip-stream> <port>")
 			System.exit(1)
@@ -25,7 +27,7 @@ object StreamTreeLearning {
 										Map())
 
 		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
-		val filtered = FilterProcess.filter(reddits)
+		val filtered = FilterProcess.filter(reddits,k_parameter)
 		
 		// Start the computation
 		ssc.start()
