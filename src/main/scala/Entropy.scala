@@ -13,17 +13,24 @@ object Entropy {
 	
 	/*
 	 * Calculate the entropy value
-	 * RDD is in format: (Image_id, (Array(features), unixtime, number of times reposted, class value))
-	 * At first: Image_id, (Array(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
-	 * (10003,(Array(8,127,11,10),1321941344,5,1))
+	 * RDD is in format: (Image_id, (Vector(features), unixtime, number of times reposted, class value))
+	 * At first: Image_id, (Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
+	 * (10003,(Vector(8,127,11,10),1321941344,5,1))
 	 */
-	def calculateEntropy(classes: Vector[String], data: RDD[(Int, Any, Int, Int, Int)]) {
+	def calculateEntropy(classes: Vector[String], data: RDD[(Int, Vector[Int], Int, Int, Int)]) {
 		val total_data = data.count
+		/*
 		for (i <- 0 until classes.size) {
+			data.filter(row => {
+				case (id,data_values,_,_,_) => true
+					
+				true
+			})
 			// We filter the RDD to get only the classes that we need
 			//ata.filter(f)
 			
 		}
+		*/
 	}
 	
 }
