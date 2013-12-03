@@ -11,11 +11,18 @@ import org.apache.spark.streaming.DStream
 */
 object Entropy {
 	
-	def calculateEntropy(classes: ClassesSet, data: RDD[String]) {
+	/*
+	 * Calculate the entropy value
+	 * RDD is in format: (Image_id, (Array(features), unixtime, number of times reposted, class value))
+	 * At first: Image_id, (Array(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
+	 * (10003,(Array(8,127,11,10),1321941344,5,1))
+	 */
+	def calculateEntropy(classes: ClassesSet, data: RDD[(Int, Any, Int, Int, Int)]) {
 		val total_data = data.count
 		for (i <- 0 until classes.size) {
 			// We filter the RDD to get only the classes that we need
-			data.filter(f)
+			//ata.filter(f)
+			
 		}
 	}
 	
