@@ -27,7 +27,11 @@ object StreamTreeLearning {
 										Map())
 
 		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
-		val filtered = FilterProcess.filter(reddits,k_parameter)
+		
+		//TODO: Change to DStream
+		val filtered = reddits.foreach(rdd => {
+			FilterProcess.filter(rdd,k_parameter)
+		})
 		
 		// Start the computation
 		ssc.start()

@@ -11,7 +11,11 @@ import org.apache.spark.streaming.DStream
  */
 object FilterProcess {
 	
-	def filter(reddits: DStream[String], k_parameter: Int): DStream[(Int, (Vector[Int], Int, Int, Int))] = {
+	/*
+	 * Filter the required data from the stream
+	 * TODO: change to DStream
+	 */
+	def filter(reddits: RDD[String], k_parameter: Int): RDD[(Int, (Vector[Int], Int, Int, Int))] = {
 	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), score = columns(10), number_of_comments = columns(11), username = columns(12)
@@ -29,22 +33,19 @@ object FilterProcess {
 								splitted(1).split(" ").length
 							 else
 								columns(3).split(" ").length,
-							 columns(4).toInt,
-							 columns(10).toInt,
-							 columns(11).toInt),
-							 columns(1).toInt,
-							 0,
-							 1))
+							 if (columns(4)!="") columns(4).toInt else 0,
+							 if (columns(10)!="") columns(10).toInt else 0,
+							 if (columns(11)!="") columns(11).toInt else 0),
+							 if (columns(1)!="") columns(1).toInt else 0,
+							 1,
+							 0))
 		}).reduceByKey( (l1,l2) => {
-				if (l1._3<l2._3) 
-					(Vector(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1) 
+				if (l1._2<l2._2) 
+					(Vector(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter) 0 else 1) 
 				else 
-					(Vector(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._4+l2._4,if (l1._4+l2._4<k_parameter) 0 else 1)
+					(Vector(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter) 0 else 1)
 		}).filter(entry => if (entry._1 != 0) true else false)
-	
-		// We need an action to begin the process
-		filtered.print()
-		
+			
 		// Data to RETURN will be in this format now (scala tuple)
 		// (image_id, Vector(words in title, total_votes, number_of_comments, score),unixtime, number_of_times_reposted, class value))
 		// Image_id, Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value

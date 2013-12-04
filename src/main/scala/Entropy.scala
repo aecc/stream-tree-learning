@@ -17,20 +17,21 @@ object Entropy {
 	 * At first: Image_id, (Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
 	 * (10003,(Vector(8,127,11,10),1321941344,5,1))
 	 */
-	def calculateEntropy(classes: Vector[String], data: RDD[(Int, Vector[Int], Int, Int, Int)]) {
-		val total_data = data.count
-		/*
+	def calculateEntropy(classes: Vector[String], data: RDD[(Int, (Vector[Int], Int, Int, Int))]) : Double = {
+		val total_data_count = data.count
+		var sum = 0.0
 		for (i <- 0 until classes.size) {
-			data.filter(row => {
-				case (id,data_values,_,_,_) => true
-					
-				true
-			})
+			
 			// We filter the RDD to get only the classes that we need
-			//ata.filter(f)
+			val filtered = Helper.filterByClass(data, i)
+			
+			val number_matches = filtered.count
+			val p_class_given_total = number_matches.toFloat/total_data_count
+			if (p_class_given_total!=0)
+				sum += p_class_given_total * ( Math.log(p_class_given_total) / Math.log(2) )	
 			
 		}
-		*/
+		-sum		
 	}
 	
 }
