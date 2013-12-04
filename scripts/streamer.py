@@ -5,7 +5,7 @@ import socket
 
 arglen=len(sys.argv)
 if arglen<3:
-    print('Please include port as a parameter')
+    print('Read file for instructions. Please include port as a parameter')
     exit()
 
 s = socket.socket()
@@ -17,7 +17,7 @@ while True:
     c, addr = s.accept()
     print('Client connected')
     i=0
-    with open('/home/files/redditSubmissions-sorted-date.csv') as fp:
+    with open('../files/redditSubmissions-sorted-date.csv') as fp:
         last_pos = fp.tell()
         for line in fp:
             if i>199:
