@@ -5,7 +5,7 @@ import org.apache.spark.SparkContext
 
 /**
  * @author aecc
- * Helper to add random functions with usage for production, testing, etc
+ * Helper to add random functions with usage for testing, etc
  */
 object Helper {
 
