@@ -95,7 +95,11 @@ object FilterProcess {
 						l1._3 + l2._3,
 						if (l1._3+l2._3<k_parameter.value) 0 else 1				
 				)
-		})		
+		}).filter{ 
+			case (_,(vector,_,_,_)) => {
+				if (vector.isEmpty) true else false
+			}
+		}	
 		
 	}
   
