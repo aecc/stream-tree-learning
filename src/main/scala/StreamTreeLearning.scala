@@ -35,7 +35,6 @@ object StreamTreeLearning {
 		var reposts = ssc.sparkContext.parallelize(Array((0,0)))
 		
 		//TODO: Change to DStream
-		
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
