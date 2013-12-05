@@ -39,13 +39,13 @@ object StreamTreeLearning {
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
-			reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
+			reposts = FilterProcess.getRepostsByKey(mixedRDD, reposts)
 			mixedRDD
 		})
 		
 		val reduced_dstream = filtered.filter({ 
-			case (id,(data_values,time,_,class_value)) => { 
+			case (id,(_,_,_,_)) => { 
 				if (id==7104) true else false 
 			} 
 		}).print
