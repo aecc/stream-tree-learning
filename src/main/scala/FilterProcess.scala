@@ -97,7 +97,7 @@ object FilterProcess {
 				)
 		}).filter{ 
 			case (_,(vector,_,_,_)) => {
-				if (vector.isEmpty) true else false
+				if (!vector.isEmpty) true else false
 			}
 		}	
 		
