@@ -18,7 +18,7 @@ object FilterProcess {
 	 */
 	def filter(	reddits: RDD[String],
 				k_parameter: Broadcast[Int] )
-				: RDD[(Int, (Vector[Int], Int, Int, Int))] = {
+				: RDD[(Int, (Array[Int], Int, Int, Int))] = {
 	  
 		// Count and group by image id, getting only the needed columns, keeping only the oldest post (first) and keep the number of repost
 		// image_id = columns(0), unixtime = columns(1), title = columns(3), total_votes = columns(4), score = columns(10), number_of_comments = columns(11), username = columns(12)
@@ -29,9 +29,9 @@ object FilterProcess {
 				val nline2 = nline.replaceFirst("\".*\"","")
 				val columns = nline2.split(",")	
 				if (columns.length!=15) 
-					(-1,(Vector(0,0,0,0),0,0,0))
+					(-1,(Array(0,0,0,0),0,0,0))
 				else
-					(columns(0).toInt,(Vector(
+					(columns(0).toInt,(Array(
 							 if (splitted.length!=1)
 								splitted(1).split(" ").length
 							 else
@@ -44,15 +44,15 @@ object FilterProcess {
 							 0))
 		}).reduceByKey( (l1,l2) => {
 				if (l1._2<l2._2) 
-					(Vector(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter.value) 0 else 1) 
+					(Array(l1._1(0),l1._1(1),l1._1(2),l1._1(3)),l1._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter.value) 0 else 1) 
 				else 
-					(Vector(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter.value) 0 else 1)
+					(Array(l2._1(0),l2._1(1),l2._1(2),l2._1(3)),l2._2,l1._3+l2._3,if (l1._3+l2._3<k_parameter.value) 0 else 1)
 		}).filter(entry => if (entry._1 != -1) true else false)
 			
 		// Data to RETURN in RDD will be in this format now (scala tuple)
-		// (image_id, Vector(words in title, total_votes, number_of_comments, score),unixtime, number_of_times_reposted, class value))
-		// Image_id, Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value
-		// (10003,(Vector(8,127,11,10),1321941344,5,1))
+		// (image_id, Array(words in title, total_votes, number_of_comments, score),unixtime, number_of_times_reposted, class value))
+		// Image_id, Array(number of words, attention, engagement, rating), unixtime, number of times reposted, class value
+		// (10003,(Array(8,127,11,10),1321941344,5,1))
 		filtered
 	  
 	}
@@ -61,7 +61,7 @@ object FilterProcess {
 	 * Return a new RDD with the number of reposts per image_id mixed (added)
 	 * TODO or NEVER TODO: delete old image_id from reposts
 	 */
-	def getRepostsByKey(	filtered: RDD[(Int, (Vector[Int], Int, Int, Int))],
+	def getRepostsByKey(	filtered: RDD[(Int, (Array[Int], Int, Int, Int))],
 							reposts: RDD[(Int,Int)] ) 
 							: RDD[(Int,Int)] = {
 		// We create another RDD with the number of reposts in this RDD by image_id
@@ -78,15 +78,15 @@ object FilterProcess {
 	/*
 	 * Sum reposts from the stream with old RDD
 	 */
-	def mixReposts(	filtered: RDD[(Int, (Vector[Int], Int, Int, Int))],
+	def mixReposts(	filtered: RDD[(Int, (Array[Int], Int, Int, Int))],
 					reposts: RDD[(Int,Int)],
 					k_parameter: Broadcast[Int] ) 
-					: RDD[(Int, (Vector[Int], Int, Int, Int))] = {
+					: RDD[(Int, (Array[Int], Int, Int, Int))] = {
 		
 		// TODO: Maybe there is a better way
 		val reposts_formatted = reposts.map {
 			case (image_id,n_reposts) => {
-				(image_id,(Vector[Int](),0,n_reposts,0))
+				(image_id,(Array[Int](),0,n_reposts,0))
 			}
 		}
 		(filtered++reposts_formatted).reduceByKey((l1,l2) => {
@@ -96,8 +96,8 @@ object FilterProcess {
 						if (l1._3+l2._3<k_parameter.value) 0 else 1				
 				)
 		}).filter{ 
-			case (_,(vector,_,_,_)) => {
-				if (!vector.isEmpty) true else false
+			case (_,(array,_,_,_)) => {
+				if (!array.isEmpty) true else false
 			}
 		}	
 		

@@ -12,7 +12,7 @@ object Helper {
 	/*
 	 * Filter RDD by Class number
 	 */
-	def filterByClass(data: RDD[(Int, (Vector[Int], Int, Int, Int))], class_to_use: Int ) : RDD[(Int, (Vector[Int], Int, Int, Int))] = {
+	def filterByClass(data: RDD[(Int, (Array[Int], Int, Int, Int))], class_to_use: Int ) : RDD[(Int, (Array[Int], Int, Int, Int))] = {
 		val filtered = data.filter { 
 			case (_,(_,_,_,class_value)) => {
 				if (class_value==class_to_use) 
@@ -27,7 +27,7 @@ object Helper {
 	/*
 	 * Filter by maximum unix time of the post 
 	 */
-	def filterByTime(data: RDD[(Int, (Vector[Int], Int, Int, Int))], max_time: Int ) : RDD[(Int, (Vector[Int], Int, Int, Int))] = {
+	def filterByTime(data: RDD[(Int, (Array[Int], Int, Int, Int))], max_time: Int ) : RDD[(Int, (Array[Int], Int, Int, Int))] = {
 		val filtered = data.filter { 
 			case (_,(_,unixtime,_,_)) => {
 				if (unixtime<max_time) 
@@ -42,7 +42,7 @@ object Helper {
 	/*
 	 * Get the maximum number of reposts in the dataset
 	 */
-	def getMaxReposts(data: RDD[(Int, (Vector[Int], Int, Int, Int))]) : Int = {
+	def getMaxReposts(data: RDD[(Int, (Array[Int], Int, Int, Int))]) : Int = {
 
 		val f = data.map {
 			case (_,(_,_,times,_)) => {

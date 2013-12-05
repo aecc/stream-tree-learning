@@ -13,11 +13,11 @@ object Entropy {
 	
 	/*
 	 * Calculate the entropy value
-	 * RDD is in format: (Image_id, (Vector(features), unixtime, number of times reposted, class value))
-	 * At first: Image_id, (Vector(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
-	 * (10003,(Vector(8,127,11,10),1321941344,5,1))
+	 * RDD is in format: (Image_id, (Array(features), unixtime, number of times reposted, class value))
+	 * At first: Image_id, (Array(number of words, attention, engagement, rating), unixtime, number of times reposted, class value)
+	 * (10003,(Array(8,127,11,10),1321941344,5,1))
 	 */
-	def calculateEntropy(classes: Vector[String], data: RDD[(Int, (Vector[Int], Int, Int, Int))]) : Double = {
+	def calculateEntropy(classes: Array[String], data: RDD[(Int, (Array[Int], Int, Int, Int))]) : Double = {
 		val total_data_count = data.count
 		var sum = 0.0
 		for (i <- 0 until classes.size) {
