@@ -26,14 +26,29 @@ object StreamTreeLearning {
 										List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"),
 										Map())
 
-		val reddits = ssc.socketTextStream(args(1), args(2).toInt)
+		val reddits_stream = ssc.socketTextStream(args(1), args(2).toInt)
+		
+		// We broadcast the k parameter, because it's a read-only variable
+		val k_param = ssc.sparkContext.broadcast(k_parameter)
+		
+		// External data structure to save reposts per image_id
+		var reposts = ssc.sparkContext.parallelize(Array((0,0)))
 		
 		//TODO: Change to DStream
-		val filtered = reddits.transform(rdd => {
-			FilterProcess.filter(rdd,k_parameter)
+		
+		// Transform the RDDs coming from the stream using the following process
+		val filtered = reddits_stream.transform(rdd => {
+			val filteredRDD = FilterProcess.filter(rdd,k_param)
+			reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
+			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
+			mixedRDD
 		})
 		
-		filtered.print
+		val reduced_dstream = filtered.filter({ 
+			case (id,(data_values,time,_,class_value)) => { 
+				if (id==7104) true else false 
+			} 
+		}).print
 		
 		// Start the computation
 		ssc.start()
