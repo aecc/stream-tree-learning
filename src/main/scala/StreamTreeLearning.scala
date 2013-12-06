@@ -42,17 +42,20 @@ object StreamTreeLearning {
 			reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 			reposts.persist
 			// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
-			Tree.makeDecisionTree(mixedRDD, Array("number_words_title"), Array("Yes",""))
-			mixedRDD
+			val treeRDD = Tree.makeDecisionTree(mixedRDD, Array("number_words_title"), Array("Yes",""))
+			treeRDD
 		})
 		
 		// TODO: remove
+		/*
 		val reduced_dstream = filtered.filter({ 
 			case (id,(_,_,_,_)) => { 
 				if (id==7104) true else false 
 			} 
 		}).print
+		*/
 		
+		filtered.print
 		
 		// Start the computation
 		ssc.start()

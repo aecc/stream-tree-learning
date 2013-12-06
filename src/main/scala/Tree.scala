@@ -12,12 +12,17 @@ import org.apache.spark.streaming.DStream
  */
 object Tree {
 	
-	def makeDecisionTree(data_set: RDD[(Int, (Array[Int], Int, Int, Int))], attributes: Array[String], classes: Array[String] ) {
+	def makeDecisionTree(	data_set: RDD[(Int, (Array[Int], Int, Int, Int))], 
+							attributes: Array[String], 
+							classes: Array[String]) 
+							: RDD[(Int, (Array[Int], Int, Int, Int))] = {
+		
 		val attribute_values = data_set.context.broadcast(new AttributeValues(attributes))
 		// TODO: remove
-		data_set.map {
-			case (_,(_,_,_,_)) => {
-				attribute_values.value.getValuesNames("number_words_title").foreach(println)
+		data_set.filter {
+			case (_,(Array(number_words, attention, engagement, rating),_,_,_)) => {
+				val title_longer_than_k = attribute_values.value.getValues("number_words_title")(0)
+				title_longer_than_k(16)
 			}
 		}
 	}
