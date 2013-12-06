@@ -17,7 +17,7 @@ object Tree {
 		// TODO: remove
 		data_set.foreach {
 			case (_,(_,_,_,_)) => {
-				println(attribute_values.value.getValuesNames("number_words_title"))
+				attribute_values.value.getValuesNames("number_words_title").foreach(println)
 			}
 		}
 	}
