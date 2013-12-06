@@ -34,17 +34,18 @@ object StreamTreeLearning {
 		// External data structure to save reposts per image_id
 		var reposts = ssc.sparkContext.parallelize(Array((0,0)))
 		
-		//TODO: Change to DStream
+		// TODO: Change to DStream
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
 			reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 			reposts.persist
-			// TODO: EXTREMELY UNEFFICIENT
+			// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 			mixedRDD
 		})
 		
+		// TODO: remove
 		val reduced_dstream = filtered.filter({ 
 			case (id,(_,_,_,_)) => { 
 				if (id==7104) true else false 
