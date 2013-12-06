@@ -20,8 +20,9 @@ object Tree {
 		val attribute_values = data_set.context.broadcast(new AttributeValues(attributes))
 		// TODO: remove
 		data_set.filter {
-			case (_,(Array(number_words, attention, engagement, rating),_,_,_)) => {
+			case (image_id,(Array(number_words, attention, engagement, rating),_,_,_)) => {
 				val title_longer_than_k = attribute_values.value.getValues("number_words_title")(0)
+				if (title_longer_than_k(number_words)) println(image_id)
 				title_longer_than_k(number_words)
 			}
 		}

@@ -47,15 +47,15 @@ object StreamTreeLearning {
 		})
 		
 		// TODO: remove
-		/*
+		
 		val reduced_dstream = filtered.filter({ 
 			case (id,(_,_,_,_)) => { 
-				if (id==7104) true else false 
+				if (id==710455) true else false 
 			} 
 		}).print
-		*/
 		
-		filtered.print
+		
+		//filtered.print
 		
 		// Start the computation
 		ssc.start()
