@@ -41,7 +41,7 @@ object StreamTreeLearning {
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
 			reposts = FilterProcess.getRepostsByKey(mixedRDD, reposts)
 			reposts.persist
-			println(reposts.count)
+			reposts.foreach(println)
 			//mixedRDD
 			mixedRDD
 		})
