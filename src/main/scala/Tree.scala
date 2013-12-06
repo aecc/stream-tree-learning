@@ -15,7 +15,7 @@ object Tree {
 	def makeDecisionTree(data_set: RDD[(Int, (Array[Int], Int, Int, Int))], attributes: Array[String], classes: Array[String] ) {
 		val attribute_values = data_set.context.broadcast(new AttributeValues(attributes))
 		// TODO: remove
-		data_set.foreach {
+		data_set.map {
 			case (_,(_,_,_,_)) => {
 				attribute_values.value.getValuesNames("number_words_title").foreach(println)
 			}
