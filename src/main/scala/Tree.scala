@@ -22,6 +22,7 @@ object Tree {
 		data_set.filter {
 			case (_,(Array(number_words, attention, engagement, rating),_,_,_)) => {
 				val title_longer_than_k = attribute_values.value.getValues("number_words_title")(0)
+				println(attribute_values.value.getValuesNames("number_words_title")(0))
 				title_longer_than_k(6)
 			}
 		}
