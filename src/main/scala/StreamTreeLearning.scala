@@ -39,9 +39,9 @@ object StreamTreeLearning {
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
-			reposts = FilterProcess.getRepostsByKey(mixedRDD, reposts)
-			reposts.persist
-			println(reposts.count)
+			val r = FilterProcess.getRepostsByKey(mixedRDD, reposts)
+			//reposts.persist
+			println(r.count)
 			//mixedRDD
 			mixedRDD
 		})
