@@ -30,6 +30,9 @@ object StreamTreeLearning {
 		
 		// We broadcast the k parameter, because it's a read-only variable
 		val k_param = ssc.sparkContext.broadcast(k_parameter)
+		// Attributes and classes
+		val attributes = Array("number_words_title")
+		val classes = Array("Yes","No")
 		
 		// External data structure to save reposts per image_id
 		var reposts = ssc.sparkContext.parallelize(Array((0,0)))
@@ -42,20 +45,20 @@ object StreamTreeLearning {
 			// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 			//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 			reposts.persist
-			val treeRDD = Tree.makeDecisionTree(mixedRDD, Array("number_words_title"), Array("Yes",""))
+			val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 			treeRDD
 		})
 		
 		// TODO: remove
-		
+		/*
 		val reduced_dstream = filtered.filter({ 
 			case (id,(_,_,_,_)) => { 
 				if (id==710455) true else false 
 			} 
 		}).print
+		*/
 		
-		
-		//filtered.print
+		filtered.print
 		
 		// Start the computation
 		ssc.start()

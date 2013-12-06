@@ -17,16 +17,17 @@ object Tree {
 							classes: Array[String]) 
 							: RDD[(Int, (Array[Int], Int, Int, Int))] = {
 		
+		/*
 		val attribute_values = data_set.context.broadcast(new AttributeValues(attributes))
 		// TODO: remove
-		val a = data_set.filter {
+		data_set.filter {
 			case (image_id,(Array(number_words, attention, engagement, rating),_,_,_)) => {
 				val title_longer_than_k = attribute_values.value.getValues("number_words_title")(0)
 				title_longer_than_k(number_words)
 			}
 		}
-		println(a.count)
-		a
+		*/
+		data_set
 	}
 	
 	def bestSplit(data_set: RDD[(Int, (Array[Int], Int, Int, Int))], attributes: Array[String], classes: Array[String] ) {
