@@ -71,9 +71,9 @@ object FilterProcess {
 				(image_id,n_reposts)
 			}
 		}
-		/*
+		
 		// We sum the number of reposts of previous data with the new data
-		(new_reposts++reposts).reduceByKey(_+_)	*/
+		(new_reposts++reposts).reduceByKey(_+_)	
 		reposts
 	}
 	
