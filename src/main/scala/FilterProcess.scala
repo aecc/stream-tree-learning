@@ -65,6 +65,7 @@ object FilterProcess {
 							reposts: RDD[(Int,Int)] ) 
 							: RDD[(Int,Int)] = {
 		// We create another RDD with the number of reposts in this RDD by image_id
+		/*
 		val new_reposts = filtered.map {
 			case (image_id,(_,_,n_reposts,_)) => {
 				(image_id,n_reposts)
@@ -72,7 +73,8 @@ object FilterProcess {
 		}
 		
 		// We sum the number of reposts of previous data with the new data
-		(new_reposts++reposts).reduceByKey(_+_)	
+		(new_reposts++reposts).reduceByKey(_+_)	*/
+		reposts
 	}
 	
 	/*
