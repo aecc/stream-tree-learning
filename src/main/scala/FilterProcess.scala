@@ -74,7 +74,6 @@ object FilterProcess {
 		
 		// We sum the number of reposts of previous data with the new data
 		(new_reposts++reposts).reduceByKey(_+_)	
-		reposts
 	}
 	
 	/*
