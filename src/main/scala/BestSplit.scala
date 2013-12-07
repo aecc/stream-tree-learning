@@ -7,6 +7,9 @@ import org.apache.spark.broadcast.Broadcast
 
 object BestSplit{
 	
+	/*
+	 * Gets the best split of to get the next better attribute
+	 */
 	def bestSplit(	dataRDD: RDD[(Int, (Array[Int], Int, Int, Int))],
 					entropy_before: Double,
 					attributes: Array[(String, Array[Int => Boolean])], 
@@ -20,10 +23,12 @@ object BestSplit{
 		val features_array = attribute_values.attributes.toArray
 		val numbers = (0 until features_array.size).toArray 
 		
+		// Get the entropy for each of the attributes
 		val entropies = numbers.map(number => {
 			
 			val current_feature = features_array(number)
 			
+			// Check if it's in the list of attributes that we want to check 
 			var filter = false
 			for (att <- attributes) {	
 				if (att.equals(current_feature)) {
@@ -37,6 +42,7 @@ object BestSplit{
 						(features(number),class_value)
 					}
 				}
+				// Calculate the entropy for this feature given the data set
 				Entropy.calculateEntropy(featureRDD, classes)
 			} else {
 				0.0

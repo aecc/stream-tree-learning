@@ -9,6 +9,7 @@ import org.apache.spark.broadcast.Broadcast
 class Chain(feature: String, value: Int => Boolean) {
 	
 	var chain = List[(String,Int => Boolean)]((feature,value))	
+	var entropy = 0.0
 	
 	/*
 	 * Get the names of the attributes in the chain

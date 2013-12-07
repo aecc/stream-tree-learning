@@ -35,6 +35,7 @@ object Tree {
 		var i = 1
 		while (i <= max_depth) {
 			
+			// TODO: chainSet usage in the following code has no sense at all!
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				val attrs = dataRDD.context.broadcast(chain.getAttributes)
@@ -44,17 +45,20 @@ object Tree {
 				val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
 				
 				// Find the best split among the attributes remaining
-				// TODO
-				val ((feature,values),entropy1) = BestSplit.bestSplit(sampleRDD, entropy, possible_attributes, attribute_values, classes)
+				val ((feature,values),entropy) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 				
 				if (feature != null) {
 					chainSet = chainSet ++ dataRDD.context.parallelize(values).map({
 							value => { 
 								val new_chain = new Chain(feature,value)
 								new_chain.chain = chain.chain ++ new_chain.chain
+								new_chain.entropy = entropy
 								new_chain
 							}
 					})
+				} else {
+					// TODO: do something!
+					
 				}
 			
 			})
