@@ -26,10 +26,8 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 		attr match {
 			// Bind attributes to attributes values
 			case "number_words_title" => 
-				attributes(attr) = Array(	title_longer_than_k,
-											title_shorter_than_k)
-				attributes_name(attr) = Array(	"title_longer_than_k",
-												"title_shorter_than_k")
+				attributes(attr) = Array(title_longer_than_k, title_shorter_than_k)
+				attributes_name(attr) = Array(	"title_longer_than_k", "title_shorter_than_k")
 			
 			case "attention" =>
 				attributes(attr) = Array()
