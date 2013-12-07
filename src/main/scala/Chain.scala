@@ -21,7 +21,7 @@ class Chain(feature: String, value: Int => Boolean) {
 	}
 	
 	/*
-	 * Get the attribute array of the chain
+	 * Get the attribute array of the chain 
 	 */
 	def getAttributes(): Array[(String, Int => Boolean)] = {
 		chain.toArray
