@@ -2,51 +2,56 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 import scala.collection.mutable.HashMap
+import org.apache.spark.broadcast.Broadcast
 
 
 object BestSplit{
-
-	def bestSplit(inputset: RDD[(Int, (Array[Int], Int, Int, Int))], attribset: Array[String], classes: Array[String]): 
-	(java.lang.String, Array[Int=>Boolean]) = {
 	
-		for(a <- 0 until attribset.size) {
+	def bestSplit(	dataRDD: RDD[(Int, (Array[Int], Int, Int, Int))],
+					entropy_before: Double,
+					attributes: Array[(String, Array[Int => Boolean])], 
+					att_values: Broadcast[AttributeValues], 
+					classes: Array[String]) 
+					: ((String, Array[Int => Boolean]),Double) = {
 		
-			val new_rdd = mapSamples(inputset, attribset(a)) 
+		if (attributes.isEmpty) return ((null,null),0.0)
 		
-			if(new_rdd.count() > 0){
-
-				val entropyAfterSplit = new_rdd.map(inputset=>{Entropy.calculateEntrophy(classes, inputset)})
-				
-			}
-		}
+		val attribute_values = att_values.value
+		val features_array = attribute_values.attributes.toArray
+		val numbers = (0 until features_array.size).toArray 
 		
-	}
-	
-
-	def mapSamples(inputset: RDD[(Int, (Array[Int], Int, Int, Int))], feature: java.lang.String): RDD[(java.lang.String, (Array[Int], Int))] = {
-	
-		val featureAndValue = inputset.map{
-
-			case(_,(Array(notitle,_,_,_),_,_,classType))=> {
-				(feature, notitle,classType)
-			}
-		
-			case(_,(Array(_,attention,_,_),_,_,classType)) => {
-				(feature, attention, classType)
+		val entropies = numbers.map(number => {
+			
+			val current_feature = features_array(number)
+			
+			var filter = false
+			for (att <- attributes) {	
+				if (att.equals(current_feature)) {
+					filter = true
+				}
 			}
 			
-			case(_,(Array(_,_,engagement,_),_,_,classType)) => {
-				(feature,  engagement, classType)
+			if (filter) {
+				val featureRDD = dataRDD.map {
+					case (_,(features,_,_,class_value)) => {
+						(features(number),class_value)
+					}
+				}
+				Entropy.calculateEntropy(featureRDD, classes)
+			} else {
+				0.0
 			}
 			
-			case(_,(Array(_,_,_,rating),_,_,classType)) => {
-				(feature, rating, classType)
-			}
-		}
-
-			featureAndValue.groupBy()//need to group by feature
-	
+		})	
 		
+		// Choose the entropy that maximizes the infomation gain
+		val bestIG = entropies.map(entropy => {
+			entropy_before - entropy
+		}).max
+		
+		val best_feature_index = entropies.indexOf(bestIG)
+		val best_feature = features_array(best_feature_index)
+		((best_feature._1,best_feature._2),entropies(best_feature_index))	
 	}
 
 }

@@ -27,7 +27,7 @@ object Tree {
 		val attribute_values = dataRDD.context.broadcast(new AttributeValues(attributes))
 		
 		// First split to get first best feature
-		val (feature,values) = bestSplit(dataRDD,attribute_values.value.attributes.toArray,classes)
+		val ((feature,values),entropy) = BestSplit.bestSplit(dataRDD, 0.0, attribute_values.value.attributes.toArray, attribute_values, classes)
 		
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
@@ -44,10 +44,10 @@ object Tree {
 				val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
 				
 				// Find the best split among the attributes remaining
-				val (feature,values) = bestSplit(sampleRDD,possible_attributes,classes)
+				// TODO
+				val ((feature,values),entropy1) = BestSplit.bestSplit(sampleRDD, entropy, possible_attributes, attribute_values, classes)
 				
 				if (feature != null) {
-					//val attribute
 					chainSet = chainSet ++ dataRDD.context.parallelize(values).map({
 							value => { 
 								val new_chain = new Chain(feature,value)
@@ -73,17 +73,6 @@ object Tree {
 		* */
 		chainSet
 		
-	}
-	
-	/*
-	 * TODO
-	 */
-	def bestSplit(	data_set: RDD[(Int, (Array[Int], Int, Int, Int))], 
-					attributes: Array[(String, Array[Int => Boolean])], 
-					classes: Array[String]) 
-					: (String, Array[Int => Boolean]) = {
-		
-		attributes(0)		
 	}
 
 }

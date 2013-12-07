@@ -25,6 +25,22 @@ object Helper {
 	}
 	
 	/*
+	 * Filter one feature RDD by Class number
+	 */
+	def filterFeatureByClass(data: RDD[(Int, Int)], class_to_use: Int ) : RDD[(Int, Int)] = {
+		val filtered = data.filter { 
+			case (_,class_value) => {
+				if (class_value==class_to_use) 
+					true
+				else
+					false
+			}
+		}
+		filtered
+	}
+	
+	
+	/*
 	 * Filter by maximum unix time of the post 
 	 */
 	def filterByTime(data: RDD[(Int, (Array[Int], Int, Int, Int))], max_time: Int ) : RDD[(Int, (Array[Int], Int, Int, Int))] = {
