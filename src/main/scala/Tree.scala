@@ -12,6 +12,10 @@ import org.apache.spark.streaming.DStream
  */
 object Tree {
 	
+	/*
+	 * Main function for the creation of the tree
+	 * Returns an RDD of Chains
+	 */
 	def makeDecisionTree(	dataRDD: RDD[(Int, (Array[Int], Int, Int, Int))], 
 							attributes: Array[String], 
 							classes: Array[String]) 
