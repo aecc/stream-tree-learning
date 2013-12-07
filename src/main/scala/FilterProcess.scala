@@ -10,7 +10,7 @@ import org.apache.spark.broadcast.Broadcast
 /*
  * Main object for filter
  */
-object FilterProcess {
+object FilterProcess extends Serializable {
 	
 	/*
 	 * Filter the required data from the stream
