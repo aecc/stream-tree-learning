@@ -2,10 +2,13 @@ import org.apache.spark.streaming.StreamingContext._
 import org.apache.spark.SparkContext._
 import scala.Array.canBuildFrom
 import org.apache.spark.broadcast.Broadcast
+import org.apache.spark.AccumulatorParam
+import org.apache.spark.AccumulableParam
 
  /* @author aecc
  * A chain of features and its values, represented as a linked list
  */
+
 class Chain(feature: String, value: Int => Boolean) {
 	
 	var chain = List[(String,Int => Boolean)]((feature,value))	

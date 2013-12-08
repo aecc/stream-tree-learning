@@ -5,6 +5,8 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.DStream
+import org.apache.spark.Accumulable
+import scala.collection.mutable.Queue
 
 /**
  * @author aecc
@@ -32,10 +34,13 @@ object Tree {
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
 		
+		// Accumulator for chains
+		val chains_accum = dataRDD.context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
+		
 		var i = 1
 		while (i <= max_depth) {
-			
-			// TODO: chainSet usage in the following code has no sense at all!
+
+			// TODO test, filter should be redundant now
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				val attrs = dataRDD.context.broadcast(chain.getAttributes)
@@ -48,7 +53,7 @@ object Tree {
 				val ((feature,values),entropy) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 				
 				if (feature != null) {
-					chainSet = chainSet ++ dataRDD.context.parallelize(values).map({
+					val new_chains = values.map({
 							value => { 
 								val new_chain = new Chain(feature,value)
 								new_chain.chain = chain.chain ++ new_chain.chain
@@ -56,13 +61,21 @@ object Tree {
 								new_chain
 							}
 					})
+					
+					// Add the new chains to an accumulator so they can be aggregated by the driver
+					for (ch <- new_chains)
+						chains_accum += ch
+						
 				} else {
 					// TODO: do something!
 					
 				}
 			
 			})
-			
+		
+			// Add new chains discovered to the chainSet. This replaces the chainset with only the last chains. Correct?
+			chainSet = dataRDD.context.parallelize(chains_accum.value)
+			chains_accum.value.clear
 			i = i+1
 		}		
 		
