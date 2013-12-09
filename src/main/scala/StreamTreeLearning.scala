@@ -13,7 +13,7 @@ object StreamTreeLearning {
 	def main(args: Array[String]) {
 	  
 		// Parameter to decide if post is reposted or no more then k times
-		val k_parameter = 7
+		val k_parameter = 2
 		if (args.length < 3) {
 			System.err.println("Usage: StreamTreeLearning <master> <ip-stream> <port>")
 			System.exit(1)

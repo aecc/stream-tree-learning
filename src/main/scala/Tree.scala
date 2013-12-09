@@ -56,12 +56,12 @@ object Tree {
 				// We filter data according to the attributes in the chain
 				val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
 				sampleRDD.persist
-				
+				/*
 				// Find the best split among the attributes remaining
 				val ((feature,values),entropy) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 				
 				logger.info("Best split is " + feature)
-				/*
+				
 				// If we still have attributes to create
 				if (feature != null) {
 					val new_chains = values.map({
