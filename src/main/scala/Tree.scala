@@ -47,8 +47,9 @@ object Tree {
 		while (i <= max_depth) {
 
 			logger.info("Creating branches at depth "+i+"...")
+			logger.info("ChainSet has length: " + chainSet.count)
 			// TODO test, filter should be redundant now
-			//chainSet.filter(_.chain.length == i).foreach(chain => {
+			chainSet.filter(_.chain.length == i).foreach(chain => {
 				/*
 				val attrs = dataRDD.context.broadcast(chain.getAttributes)
 				val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
@@ -112,7 +113,7 @@ object Tree {
 				}
 				* */
 			
-			//})
+			})
 		
 			logger.info("Adding new chains...")
 			
