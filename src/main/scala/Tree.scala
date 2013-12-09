@@ -34,6 +34,7 @@ object Tree {
 		
 		// First split to get first best feature
 		val ((feature,values),entropy) = BestSplit.bestSplit(dataRDD, 0.0, attribute_values.value.attributes.toArray, attribute_values, classes)
+		logger.info("First Best split is " + feature)
 		
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
@@ -44,7 +45,7 @@ object Tree {
 		var i = 1
 		while (i <= max_depth) {
 
-			chainSet.filter(_ => true)
+			chainSet.foreach(println)
 			logger.info("Creating branches at depth "+i+"...")
 			// TODO test, filter should be redundant now
 			chainSet.filter(_.chain.length == i).foreach(chain => {
