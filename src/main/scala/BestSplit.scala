@@ -42,10 +42,27 @@ object BestSplit{
 						(features(number),class_value)
 					}
 				}
-				// Calculate the entropy for this feature given the data set
-				Entropy.calculateEntropy(featureRDD, classes)
+				
+				// Check entropy for each value
+				var min_entropy = 1.0
+				for (value <- current_feature._2) {
+				
+					val featureAndValueRDD = featureRDD.filter(entry => {
+						val attr_values = featureRDD.context.broadcast(Array((current_feature._1,value)))
+						attribute_values.checkParamValues(entry._1, attr_values)
+					})
+					
+					// Calculate the entropy for this feature given the data set
+					val entropy = Entropy.calculateEntropy(featureAndValueRDD, classes)
+					if (entropy<min_entropy)
+						min_entropy = entropy
+				}
+				
+				// Return the minimum entropy
+				min_entropy
+				
 			} else {
-				0.0
+				1.0
 			}
 			
 		})	

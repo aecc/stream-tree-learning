@@ -105,4 +105,20 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 		
 	}
 	
+	
+	/*
+	 * Check if the param given matches with all the attribute values in the array
+	 */
+	def checkParamValues(	param: Int, 
+							attrs_values: Broadcast[Array[(String,Int => Boolean)]])
+							: Boolean = {
+		
+		var filter = true
+		attrs_values.value.foreach(attr => {		
+			val func = attr._2
+			filter = filter && func(param)
+		})	
+		filter
+		
+	}
 }
