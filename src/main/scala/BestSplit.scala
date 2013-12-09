@@ -68,11 +68,12 @@ object BestSplit{
 		})	
 		
 		// Choose the entropy that maximizes the infomation gain
-		val bestIG = entropies.map(entropy => {
-			entropy_before - entropy
-		}).max
+		val bestIGs = entropies.map(entropy => {
+			(entropy,entropy_before - entropy)
+		})
 		
-		val best_feature_index = entropies.indexOf(bestIG)
+		val bestIG = bestIGs.maxBy(_._2)
+		val best_feature_index = entropies.indexOf(bestIG._1)
 		val best_feature = features_array(best_feature_index)
 		((best_feature._1,best_feature._2),entropies(best_feature_index))	
 	}
