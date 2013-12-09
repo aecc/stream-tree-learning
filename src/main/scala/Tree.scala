@@ -15,6 +15,8 @@ import org.apache.log4j.Logger
  */
 object Tree {
 	
+	val logger = Logger.getLogger(getClass().getName());
+	
 	/*
 	 * Main function for the creation of the tree 
 	 * Returns an RDD of Chains
@@ -24,7 +26,6 @@ object Tree {
 							classes: Array[String]) 
 							: RDD[Chain] = {
 		
-		val logger = Logger.getLogger(getClass().getName());
 		logger.info("Creating the tree...")
 		
 		// Max length of the tree
