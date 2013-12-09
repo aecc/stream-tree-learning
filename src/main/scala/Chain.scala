@@ -13,6 +13,8 @@ class Chain(feature: String, value: Int => Boolean) {
 	
 	var chain = List[(String,Int => Boolean)]((feature,value))	
 	var entropy = 0.0
+	var leaf = false
+	var data_class = -1
 	
 	/*
 	 * Get the names of the attributes in the chain

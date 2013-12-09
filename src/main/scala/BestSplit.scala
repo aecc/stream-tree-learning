@@ -17,7 +17,7 @@ object BestSplit{
 					classes: Array[String]) 
 					: ((String, Array[Int => Boolean]),Double) = {
 		
-		if (attributes.isEmpty) return ((null,null),0.0)
+		if (attributes.length==1) return ((null,null),0.0)
 		
 		val attribute_values = att_values.value
 		val features_array = attribute_values.attributes.toArray

@@ -48,10 +48,12 @@ object Tree {
 				
 				// We filter data according to the attributes in the chain
 				val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
+				sampleRDD.persist
 				
 				// Find the best split among the attributes remaining
 				val ((feature,values),entropy) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 				
+				// If we still have attributes to create
 				if (feature != null) {
 					val new_chains = values.map({
 							value => { 
@@ -67,8 +69,37 @@ object Tree {
 						chains_accum += ch
 						
 				} else {
-					// TODO: do something!
 					
+					val last_feature = possible_attributes(0)
+					
+					val new_chains = last_feature._2.map({
+							value => { 
+								
+								val attrs = sampleRDD.context.broadcast(Array((last_feature._1,value)))
+								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)})
+								val feature_entries = sampleRDD.count
+								
+								val new_chain = new Chain(feature,value)
+								new_chain.chain = chain.chain ++ new_chain.chain
+								new_chain.entropy = 0.0
+								new_chain.leaf = true
+								
+								// We assign class using majority of data entries
+								val numbers = (0 until classes.size).toArray
+								val entries_count = numbers.map(number => {
+									(number,Helper.filterByClass(value_data, number).count)
+								})
+								val max = entries_count.maxBy(_._2)
+								new_chain.data_class = max._1
+								
+								new_chain
+							}
+					})
+						
+					// Add the new chains to an accumulator so they can be aggregated by the driver
+					for (ch <- new_chains)
+						chains_accum += ch
+
 				}
 			
 			})
