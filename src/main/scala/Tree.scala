@@ -7,6 +7,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.streaming.DStream
 import org.apache.spark.Accumulable
 import scala.collection.mutable.Queue
+import org.apache.log4j.Logger
 
 /**
  * @author aecc
@@ -22,6 +23,9 @@ object Tree {
 							attributes: Array[String], 
 							classes: Array[String]) 
 							: RDD[Chain] = {
+		
+		val logger = Logger.getLogger(getClass().getName());
+		logger.info("Creating the tree...")
 		
 		// Max length of the tree
 		val max_depth = attributes.length
@@ -40,6 +44,7 @@ object Tree {
 		var i = 1
 		while (i <= max_depth) {
 
+			logger.info("Creating branches at depth "+i+"...")
 			// TODO test, filter should be redundant now
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
@@ -52,6 +57,8 @@ object Tree {
 				
 				// Find the best split among the attributes remaining
 				val ((feature,values),entropy) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
+				
+				logger.info("Best split is " + feature)
 				
 				// If we still have attributes to create
 				if (feature != null) {
@@ -104,6 +111,8 @@ object Tree {
 			
 			})
 		
+			logger.info("Adding new chains...")
+			
 			// Add new chains discovered to the chainSet. This replaces the chainset with only the last chains. Correct?
 			chainSet = dataRDD.context.parallelize(chains_accum.value)
 			chains_accum.value.clear
