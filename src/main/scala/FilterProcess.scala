@@ -9,6 +9,7 @@ import org.apache.spark.broadcast.Broadcast
 
 /*
  * Main object for filter
+ * It only accepts two classes, and four features
  */
 object FilterProcess extends Serializable {
 	

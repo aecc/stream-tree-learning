@@ -19,27 +19,40 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 	val attributes_name = new LinkedHashMap[String,Array[String]]()
 	
 	// Functions (attribute values)
-	val title_shorter_than_k : Int => Boolean = _ < 4
-	val title_longer_than_k : Int => Boolean = _ > 16
+	val title_in_range : Int => Boolean = (k => {k >= 4 && k <= 16})
+	val title_outside_range : Int => Boolean = (k => {k < 4 || k > 16})
+	
+	val rating_negative: Int => Boolean = (k => {k < 0})
+	val rating_first_range: Int => Boolean = (k => {k >= 0 && k<100})
+	val rating_second_range: Int => Boolean = (k => {k >= 100})
+	
+	val attention_first_range: Int => Boolean = (k => {k <= 500})
+	val attention_second_range: Int => Boolean = (k => {k > 500 && k<1000})
+	val attention_third_range: Int => Boolean = (k => {k >= 1000})
+	
+	val engagement_zero: Int => Boolean = (k => {k == 0})
+	val engagement_first_range: Int => Boolean = (k => {k > 0 && k<=50})
+	val engagement_second_range: Int => Boolean = (k => {k > 50 && k<=100})
+	val engagement_third_range: Int => Boolean = (k => {k > 100})
 	
 	attrs.foreach(attr => {
 		attr match {
 			// Bind attributes to attributes values
 			case "number_words_title" => 
-				attributes(attr) = Array(title_longer_than_k, title_shorter_than_k)
-				attributes_name(attr) = Array(	"title_longer_than_k", "title_shorter_than_k")
-			
-			case "attention" =>
-				attributes(attr) = Array()
-				attributes_name(attr) = Array()
-			
-			case "engagement" =>
-				attributes(attr) = Array()
-				attributes_name(attr) = Array()
+				attributes(attr) = Array(title_in_range, title_outside_range)
+				attributes_name(attr) = Array(	"title_in_range", "title_outside_range")
 			
 			case "rating" =>
-				attributes(attr) = Array()
-				attributes_name(attr) = Array()
+				attributes(attr) = Array(rating_negative, rating_first_range, rating_second_range)
+				attributes_name(attr) = Array("rating_negative", "rating_first_range", "rating_second_range")
+			
+			case "attention" =>
+				attributes(attr) = Array(attention_first_range, attention_second_range, attention_third_range)
+				attributes_name(attr) = Array("attention_first_range", "attention_second_range", "attention_third_range")
+			
+			case "engagement" =>
+				attributes(attr) = Array(engagement_zero, engagement_first_range, engagement_second_range, engagement_third_range)
+				attributes_name(attr) = Array("engagement_zero", "engagement_first_range", "engagement_second_range", "engagement_third_range")
 			
 			case _ =>
 				attributes(attr) = Array()
