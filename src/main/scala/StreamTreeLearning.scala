@@ -8,6 +8,8 @@ import org.apache.log4j._
 
 object StreamTreeLearning {
   
+	val logger = Logger.getLogger(getClass().getName());
+	
 	def main(args: Array[String]) {
 	  
 		// Parameter to decide if post is reposted or no more then k times
@@ -17,7 +19,6 @@ object StreamTreeLearning {
 			System.exit(1)
 		}
 
-		val logger = Logger.getLogger(getClass().getName());
 		logger.info("Logger is working!")
 		val ssc = new StreamingContext(	args(0), 
 										"StreamTreeLearning", 
