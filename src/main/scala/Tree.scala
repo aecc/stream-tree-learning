@@ -67,7 +67,7 @@ object Tree {
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {
 						val a =attribute_values.value.checkEntryAttributesValues(entry, attrs)
-						println(attrs.value)
+						println(attrs.value(0)._1)
 						a
 						})
 					logger.info("Data in this RDD is of size " + sampleRDD.count)
