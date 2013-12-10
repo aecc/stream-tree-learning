@@ -35,14 +35,17 @@ object Tree {
 		val attribute_values = dataRDD.context.broadcast(new AttributeValues(attributes))
 		
 		// First split to get first best feature
-		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 0.0, attribute_values.value.attributes.toArray, attribute_values, classes)
-		logger.info("First Best split is " + feature + " " + entropies(0) + " " + entropies(1))
+		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
+		logger.info("First Best split is " + feature)
 		
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
 		
 		// Accumulator for chains
 		val chains_accum = dataRDD.context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
+			
+		// We broadcast all the filtered data in the stream	
+		val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
 		
 		var i = 1
 		while (i <= max_depth) {
@@ -50,19 +53,23 @@ object Tree {
 			logger.info("Creating branches at depth "+i+"...")
 			
 			logger.info("ChainSet has length: " + chainSet.count)
-			
-			val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
-			
+				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				if (!chain.leaf) {
-					
-					/*
+
 					val dataRDD = dataRDD_broadcast.value
 					
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
+
+					logger.info("Possible attributes to split:")
+					for (possible_attribute <- possible_attributes) {
+						logger.info(possible_attribute)
+					}
+
+					logger.info("")
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
@@ -80,6 +87,8 @@ object Tree {
 						val new_chain = new Chain(feature,value)
 						new_chain.chain = chain.chain ++ new_chain.chain
 						new_chain.entropy = entropies(j)
+
+						/*
 						
 						// Entropy 1 means that the value doesn't add information so we discard the growing in this node
 						if (entropies(j)==1.0) {
@@ -108,14 +117,13 @@ object Tree {
 							// Classify if all the data entries belong to this chain?
 							
 						}
-						
+						*/
+
 						// Add the new chains to an accumulator so they can be aggregated by the driver
 						chains_accum += new_chain
 						j = j+1
 	
 					}
-					* 
-					*/
 					
 				}
 			
@@ -132,18 +140,6 @@ object Tree {
 			i = i+1
 		}		
 		
-		// TODO: remove
-		/*
-		dataRDD.filter {
-			case (image_id,(Array(number_words, attention, engagement, rating),_,_,_)) => {
-				val title_longer_than_k = attribute_values.value.getValues("number_words_title")(0)
-				title_longer_than_k(number_words)
-			}
-		}
-		
-		chainSet
-		*/
-		dataRDD.context.parallelize(Array(1,2)).map(value => new Chain(null,null))
 	}
 
 }
