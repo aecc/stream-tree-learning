@@ -47,7 +47,7 @@ object Tree {
 		while (i <= max_depth) {
 
 			logger.info("Creating branches at depth "+i+"...")
-			logger.info("ChainSet has length: " + chainSet.count)
+			//logger.info("ChainSet has length: " + chainSet.count)
 			// TODO test, filter should be redundant now
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				/*
