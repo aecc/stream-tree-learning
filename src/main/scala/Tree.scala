@@ -54,6 +54,8 @@ object Tree {
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				if (!chain.leaf) {
+					
+					/*
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
@@ -114,6 +116,8 @@ object Tree {
 						j = j+1
 	
 					}
+					* 
+					*/
 				}
 			
 			})
