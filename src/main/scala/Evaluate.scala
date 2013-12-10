@@ -15,8 +15,10 @@ import org.apache.log4j.Logger
  */
 object Evaluate {
 
-	def predictEntry(entry: (Int, (Array[Int], Int, Int, Int)), chainSet: RDD[Chain], classes: Array[String]) : Int = {
-		
+	def predictEntry(entry: (Int, (Array[Int], Int, Int, Int)), chainSet: Array[Chain], classes: Array[String]) : Int = {
+		for (chain <- chainSet) {
+			
+		}
 		0
 	}
 }
