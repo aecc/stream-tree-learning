@@ -66,7 +66,7 @@ object Tree {
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
 					// We filter data according to the attributes in the chain
-					val sampleRDD = dataRDD.filter(entry => { attribute_values.value.checkEntryAttributesValues(entry, attrs) })
+					val sampleRDD = dataRDD.filter(entry => { attribute_values.value.checkEntryAttributesValues(entry, attrs.value) })
 					logger.info("Data in this RDD is of size " + sampleRDD.count)
 					sampleRDD.persist
 					
@@ -93,7 +93,7 @@ object Tree {
 								
 								new_chain.leaf = true
 								val attrs = sampleRDD.context.broadcast(Array((feature,value)))
-								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)})
+								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 								val feature_entries = sampleRDD.count
 
 								// We assign class using majority of data entries
@@ -137,7 +137,7 @@ object Tree {
 		// Fiilter to obtain only chains with leaves
 		val filtered_chainSet = chainSet.filter(chain => chain.leaf)
 		logger.info("Final size of chainSet: " + filtered_chainSet.count)
-		filtered_chainSet.foreach(chain => println(chain.chain))
+		//filtered_chainSet.foreach(chain => println(chain.chain))
 		
 		filtered_chainSet
 		

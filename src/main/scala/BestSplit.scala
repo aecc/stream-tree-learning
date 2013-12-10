@@ -54,7 +54,7 @@ object BestSplit{
 				
 					val attr_values = featureRDD.context.broadcast(Array((current_feature._1,value)))
 					val featureAndValueRDD = featureRDD.filter(entry => {
-						attribute_values.checkParamValues(entry._1, attr_values)
+						attribute_values.checkParamValues(entry._1, attr_values.value)
 					})
 					
 					// Calculate the entropy for this feature given the data set

@@ -81,7 +81,7 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 	 * Check if the entry given matches with all the attribute values in the array
 	 */
 	def checkEntryAttributesValues(	entry: (Int, (Array[Int], Int, Int, Int)), 
-									attrs_values: Broadcast[Array[(String,Int => Boolean)]])
+									attrs_values: Array[(String,Int => Boolean)])
 									: Boolean = {
 		
 		val values_array = entry._2._1
@@ -102,11 +102,11 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 	 */
 	def checkParamAttributesValues(	feature: String,
 									param: Int, 
-									attrs_values: Broadcast[Array[(String,Int => Boolean)]])
+									attrs_values: Array[(String,Int => Boolean)])
 									: Boolean = {
 		
 		var filter = true
-		attrs_values.value.foreach(attr => {				
+		attrs_values.foreach(attr => {				
 			if (attr._1.equals(feature)) {
 				val func = attr._2
 				filter = filter && func(param)
@@ -121,11 +121,11 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 	 * Check if the param given matches with all the attribute values in the array
 	 */
 	def checkParamValues(	param: Int, 
-							attrs_values: Broadcast[Array[(String,Int => Boolean)]])
+							attrs_values: Array[(String,Int => Boolean)])
 							: Boolean = {
 		
 		var filter = true
-		attrs_values.value.foreach(attr => {		
+		attrs_values.foreach(attr => {		
 			val func = attr._2
 			filter = filter && func(param)
 		})	

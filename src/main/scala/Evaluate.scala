@@ -15,10 +15,25 @@ import org.apache.log4j.Logger
  */
 object Evaluate {
 
-	def predictEntry(entry: (Int, (Array[Int], Int, Int, Int)), chainSet: Array[Chain], classes: Array[String]) : Int = {
-		for (chain <- chainSet) {
-			
-		}
-		0
+	/*
+	 * Give the class predicted from the decision tree
+	 */
+	def predictEntry(	entry: (Int, (Array[Int], Int, Int, Int)), 
+						chainSet: RDD[Chain], 
+						classes: Array[String]) 
+						: Int = {
+		
+		val attributes = Array("number_words_title","attention", "rating", "engagement")
+		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
+		val classes = chainSet.map(chain => {
+			val attribute_vals = attribute_values.value
+			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
+				chain.data_class
+			} else {
+				-1
+			}
+		}).filter(clas => clas != -1)
+		println(classes.count)
+		classes.first
 	}
 }
