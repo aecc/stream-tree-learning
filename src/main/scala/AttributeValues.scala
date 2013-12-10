@@ -106,12 +106,10 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 									: Boolean = {
 		
 		var filter = true
-		attrs_values.value.foreach(attr => {
-			for (att <- getValuesNames(feature)) {				
-				if (attr._1.equals(att)) {
-					val func = attr._2
-					filter = filter && func(param)
-				}
+		attrs_values.value.foreach(attr => {				
+			if (attr._1.equals(feature)) {
+				val func = attr._2
+				filter = filter && func(param)
 			}
 		})	
 		filter
