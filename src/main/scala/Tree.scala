@@ -32,7 +32,7 @@ object Tree {
 		val max_depth = attributes.length
 		
 		val attribute_values = dataRDD.context.broadcast(new AttributeValues(attributes))
-		
+		/*
 		// First split to get first best feature
 		val ((feature,values),entropy) = BestSplit.bestSplit(dataRDD, 0.0, attribute_values.value.attributes.toArray, attribute_values, classes)
 		logger.info("First Best split is " + feature + " with entropy " + entropy)
@@ -42,15 +42,17 @@ object Tree {
 		
 		// Accumulator for chains
 		val chains_accum = dataRDD.context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
-		
+		*/
 		var i = 1
 		while (i <= max_depth) {
 
 			logger.info("Creating branches at depth "+i+"...")
-			//logger.info("ChainSet has length: " + chainSet.count)
+			/*
+			logger.info("ChainSet has length: " + chainSet.count)
 			// TODO test, filter should be redundant now
 			chainSet.filter(_.chain.length == i).foreach(chain => {
-				/*
+				
+				
 				val attrs = dataRDD.context.broadcast(chain.getAttributes)
 				val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 				
@@ -111,15 +113,16 @@ object Tree {
 						chains_accum += ch
 
 				}
-				* */
 			
 			})
+		
 		
 			logger.info("Adding new chains...")
 			
 			// Add new chains discovered to the chainSet. This replaces the chainset with only the last chains. Correct?
 			chainSet = dataRDD.context.parallelize(chains_accum.value)
 			chains_accum.value.clear
+			*/
 			i = i+1
 		}		
 		
@@ -131,9 +134,10 @@ object Tree {
 				title_longer_than_k(number_words)
 			}
 		}
-		* */
-		chainSet
 		
+		chainSet
+		*/
+		dataRDD.context.parallelize(Array(1,2)).map(value => new Chain(null,null))
 	}
 
 }
