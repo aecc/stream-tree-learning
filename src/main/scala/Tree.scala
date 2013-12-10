@@ -28,6 +28,7 @@ object Tree {
 		
 		logger.info("Creating the tree...")
 		logger.info("Initial data has " + dataRDD.count)
+		dataRDD.persist
 		
 		// Max length of the tree
 		val max_depth = attributes.length
