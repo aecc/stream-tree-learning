@@ -89,6 +89,7 @@ object Tree {
 							// If this was the last attribute to split
 							if (possible_attributes.length==1) {
 								
+								new_chain.leaf = true
 								val attrs = sampleRDD.context.broadcast(Array((feature,value)))
 								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)})
 								val feature_entries = sampleRDD.count
@@ -102,10 +103,11 @@ object Tree {
 								if (max._2!=0)
 									new_chain.data_class = max._1
 
+							} else {
+								// TODO: ?
+								// Classify if all the data entries belong to this chain?								
+								
 							}
-							
-							// TODO: ?
-							// Classify if all the data entries belong to this chain?
 							
 						}
 
