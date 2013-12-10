@@ -72,54 +72,46 @@ object Tree {
 					logger.info("Best split is " + feature)
 					
 					var j = 0
-					while (j < entropies.length) {
+					
+					for (value <- values) {
 						
-						val new_chains = values.map({
-								value => {
-									val new_chain = new Chain(feature,value)
-									new_chain.chain = chain.chain ++ new_chain.chain
-									new_chain.entropy = entropies(j)
-									
-									// Entropy 1 means that the value doesn't add information so we discard the growing in this node
-									if (entropies(j)==1.0) {
-										new_chain.leaf = true
-									} else {				
-										
-										// If this was the last attribute to split
-										if (possible_attributes.length==1) {
-											
-											val attrs = sampleRDD.context.broadcast(Array((feature,value)))
-											val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)})
-											val feature_entries = sampleRDD.count
-	
-											// We assign class using majority of data entries
-											val numbers = (0 until classes.size).toArray
-											val entries_count = numbers.map(number => {
-												(number,Helper.filterByClass(value_data, number).count)
-											})
-											val max = entries_count.maxBy(_._2)
-											if (max._2!=0)
-												new_chain.data_class = max._1
+						val new_chain = new Chain(feature,value)
+						new_chain.chain = chain.chain ++ new_chain.chain
+						new_chain.entropy = entropies(j)
+						
+						// Entropy 1 means that the value doesn't add information so we discard the growing in this node
+						if (entropies(j)==1.0) {
+							new_chain.leaf = true
+						} else {				
+							
+							// If this was the last attribute to split
+							if (possible_attributes.length==1) {
+								
+								val attrs = sampleRDD.context.broadcast(Array((feature,value)))
+								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)})
+								val feature_entries = sampleRDD.count
 
-										}
-										
-										// TODO: ?
-										// Classify if all the data entries belong to this chain?
-										
-									}
-									
-									new_chain
-								}
-						})
+								// We assign class using majority of data entries
+								val numbers = (0 until classes.size).toArray
+								val entries_count = numbers.map(number => {
+									(number,Helper.filterByClass(value_data, number).count)
+								})
+								val max = entries_count.maxBy(_._2)
+								if (max._2!=0)
+									new_chain.data_class = max._1
+
+							}
+							
+							// TODO: ?
+							// Classify if all the data entries belong to this chain?
+							
+						}
 						
 						// Add the new chains to an accumulator so they can be aggregated by the driver
-						for (ch <- new_chains)
-							chains_accum += ch
-						
+						chains_accum += new_chain
 						j = j+1
 	
 					}
-					 
 					
 				}
 			
