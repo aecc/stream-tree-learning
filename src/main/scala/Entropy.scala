@@ -22,6 +22,8 @@ object Entropy {
 							: Double = {
 		
 		val total_data_count = data.count
+		if (total_data_count==0) return 1.0
+		
 		var sum = 0.0
 		for (i <- 0 until classes.size) {
 			

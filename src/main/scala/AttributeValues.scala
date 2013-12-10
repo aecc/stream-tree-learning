@@ -22,13 +22,13 @@ class AttributeValues(attrs: Array[String]) extends Serializable {
 	val title_in_range : Int => Boolean = (k => {k >= 4 && k <= 16})
 	val title_outside_range : Int => Boolean = (k => {k < 4 || k > 16})
 	
-	val rating_negative: Int => Boolean = (k => {k < 0})
-	val rating_first_range: Int => Boolean = (k => {k >= 0 && k<100})
-	val rating_second_range: Int => Boolean = (k => {k >= 100})
-	
 	val attention_first_range: Int => Boolean = (k => {k <= 500})
 	val attention_second_range: Int => Boolean = (k => {k > 500 && k<1000})
 	val attention_third_range: Int => Boolean = (k => {k >= 1000})
+	
+	val rating_negative: Int => Boolean = (k => {k < 0})
+	val rating_first_range: Int => Boolean = (k => {k >= 0 && k<100})
+	val rating_second_range: Int => Boolean = (k => {k >= 100})
 	
 	val engagement_zero: Int => Boolean = (k => {k == 0})
 	val engagement_first_range: Int => Boolean = (k => {k > 0 && k<=50})

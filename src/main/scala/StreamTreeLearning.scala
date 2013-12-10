@@ -33,7 +33,7 @@ object StreamTreeLearning {
 		val k_param = ssc.sparkContext.broadcast(k_parameter)
 		
 		// Attributes and classes
-		val attributes = Array("number_words_title","attention", "engagement", "rating")
+		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val classes = Array("Reposted_Less_Than_K","Reposted_More_Equal_Than_K")
 		
 		// External data structure to save reposts per image_id
