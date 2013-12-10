@@ -9,7 +9,7 @@ import org.apache.spark.AccumulableParam
  * A chain of features and its values, represented as a linked list
  */
 
-class Chain(feature: String, value: Int => Boolean) {
+class Chain(feature: String, value: Int => Boolean) extends Serializable {
 	
 	var chain = List[(String,Int => Boolean)]((feature,value))	
 	var entropy = 0.0
