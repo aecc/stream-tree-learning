@@ -138,7 +138,9 @@ object Tree {
 			chains_accum.value.clear
 			
 			i = i+1
-		}		
+		}
+		
+		chainSet
 		
 	}
 
