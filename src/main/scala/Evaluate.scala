@@ -15,6 +15,8 @@ import org.apache.log4j.Logger
  */
 object Evaluate {
 
+	val logger = Logger.getLogger(getClass().getName());
+	
 	/*
 	 * Give the class predicted from the decision tree
 	 */
@@ -33,7 +35,11 @@ object Evaluate {
 				-1
 			}
 		}).filter(clas => clas != -1)
-		println(classes.count)
+		logger.info("Number of Chains:" + chainSet.count)
+		logger.info("Entry:" + entry._2._1)
+		logger.info("Number of coincidences in chains:" + classes.count)
+		logger.info("Predicted class:" + classes.first)		
+		
 		classes.first
 	}
 }
