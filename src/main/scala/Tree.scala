@@ -122,6 +122,7 @@ object Tree {
 			
 			// Add new chains discovered to the chainSet. 
 			chainSet ++= dataRDD.context.parallelize(chains_accum.value)
+			logger.info("After adding chains chainSet has length: " + chainSet.count)
 			chains_accum.value.clear
 			
 			i = i+1
