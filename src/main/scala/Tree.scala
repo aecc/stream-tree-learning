@@ -61,6 +61,9 @@ object Tree {
 					val dataRDD = dataRDD_broadcast.value
 					
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
+					for (at <- chain.getAttributes) {
+						logger.info("at: " + at)
+					}
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
