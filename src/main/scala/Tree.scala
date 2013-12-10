@@ -27,6 +27,7 @@ object Tree {
 							: RDD[Chain] = {
 		
 		logger.info("Creating the tree...")
+		logger.info("Initial data has " + dataRDD.count)
 		
 		// Max length of the tree
 		val max_depth = attributes.length
