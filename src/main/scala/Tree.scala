@@ -63,15 +63,6 @@ object Tree {
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
-
-					logger.info("Possible attributes to split:")
-					for (possible_attribute <- possible_attributes) {
-						logger.info(possible_attribute)
-					}
-					logger.info("")
-					
-					// If we cannot split more then do nothing
-					if (possible_attributes.length==0) true
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
@@ -89,8 +80,6 @@ object Tree {
 						val new_chain = new Chain(feature,value)
 						new_chain.chain = chain.chain ++ new_chain.chain
 						new_chain.entropy = entropies(j)
-
-						/*
 						
 						// Entropy 1 means that the value doesn't add information so we discard the growing in this node
 						if (entropies(j)==1.0) {
@@ -119,7 +108,6 @@ object Tree {
 							// Classify if all the data entries belong to this chain?
 							
 						}
-						*/
 
 						// Add the new chains to an accumulator so they can be aggregated by the driver
 						chains_accum += new_chain
