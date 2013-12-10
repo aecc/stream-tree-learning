@@ -126,7 +126,7 @@ object Tree {
 			})
 		
 		
-			logger.info("Adding new chains...")
+			logger.info("Adding new chains... Number: " + chains_accum.value.length)
 			
 			// Add new chains discovered to the chainSet. 
 			chainSet ++= dataRDD.context.parallelize(chains_accum.value)
