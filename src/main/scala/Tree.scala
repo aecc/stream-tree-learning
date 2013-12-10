@@ -68,8 +68,10 @@ object Tree {
 					for (possible_attribute <- possible_attributes) {
 						logger.info(possible_attribute)
 					}
-
 					logger.info("")
+					
+					// If we cannot split more then do nothing
+					if (possible_attributes.length==0) true
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
