@@ -52,11 +52,12 @@ object Tree {
 			logger.info("ChainSet has length: " + chainSet.count)
 			
 			val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
-			// TODO test
+			
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				if (!chain.leaf) {
 					
+					/*
 					val dataRDD = dataRDD_broadcast.value
 					
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
@@ -113,6 +114,8 @@ object Tree {
 						j = j+1
 	
 					}
+					* 
+					*/
 					
 				}
 			
