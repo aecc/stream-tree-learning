@@ -134,7 +134,10 @@ object Tree {
 			i = i+1
 		}
 		
-		chainSet
+		// Fiilter to obtain only chains with leaves
+		val filtered_chainSet = chainSet.filter(chain => chain.leaf)
+		logger.info("Final size of chainSet: " + filtered_chainSet.count)
+		filtered_chainSet
 		
 	}
 
