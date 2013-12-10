@@ -32,7 +32,7 @@ object Entropy {
 			
 			val number_matches = filtered.count
 			val p_class_given_total = number_matches.toFloat/total_data_count
-			if (p_class_given_total!=0)
+			if (p_class_given_total!=0.0)
 				sum += p_class_given_total * ( Math.log(p_class_given_total) / Math.log(2) )	
 			
 		}

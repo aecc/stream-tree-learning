@@ -48,8 +48,8 @@ object BestSplit{
 				
 				var entropies_per_value = new Array[Double](0)
 				// Check entropy for each value
-				var min_entropy = 1.0
-				var i = 0
+				var sum = 0.0
+				
 				for (value <- current_feature._2) {
 				
 					val attr_values = featureRDD.context.broadcast(Array((current_feature._1,value)))
@@ -61,16 +61,15 @@ object BestSplit{
 					val entropy = Entropy.calculateEntropy(featureAndValueRDD, classes)
 					entropies_per_value = entropies_per_value :+ entropy
 					
-					if (entropy<min_entropy)
-						min_entropy = entropy
-					i = i + 1
+					sum += entropy
+					
 				}
 				
-				// Return the minimum entropy
-				(min_entropy,entropies_per_value)
+				// Return the entropies
+				(sum,entropies_per_value)
 				
 			} else {
-				(1.0,Array[Double]())
+				(Double.MaxValue,Array[Double]())
 			}
 			
 		})	

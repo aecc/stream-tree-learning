@@ -71,5 +71,19 @@ object Helper {
 					l2
 		})
 		f.first._2
-}
+	}
+	
+	def loadTestData() {
+		/*
+		import org.apache.spark._
+		val sc = new SparkContext("local", "shell")
+		val small = sc.textFile("/home/aecc/git/stream-tree-learning/files/redditSubmissions-small.csv", 2).cache()
+		val k_parameter = sc.broadcast(2)
+		val sfiltered = FilterProcess.filter(small,k_parameter)
+		val attributes = Array("number_words_title","attention", "rating", "engagement")
+		val classes = Array("Reposted_Less_Than_K","Reposted_More_Equal_Than_K")
+		val attribute_values = sc.broadcast(new AttributeValues(attributes))
+		val ((feature,values),entropies) = BestSplit.bestSplit(sfiltered, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
+		*/
+	}
 }
