@@ -50,19 +50,22 @@ object Tree {
 			
 			logger.info("ChainSet has length: " + chainSet.count)
 			
+			val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
 			// TODO test
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
 				if (!chain.leaf) {
 					
+					val dataRDD = dataRDD_broadcast.value
 					
 					val attrs = dataRDD.context.broadcast(chain.getAttributes)
+					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs)}) 
 					sampleRDD.persist
-					/*
+					
 					// Find the best split among the attributes remaining
 					val ((feature,values),entropies) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 					
@@ -116,8 +119,8 @@ object Tree {
 						j = j+1
 	
 					}
-					* 
-					*/
+					 
+					
 				}
 			
 			})
