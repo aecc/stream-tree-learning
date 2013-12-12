@@ -53,7 +53,9 @@ object StreamTreeLearning {
 			reposts.persist
 			val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 			logger.info("Finished decision tree making [3/3]")
-			Evaluate.predictEntry(filteredRDD.first, treeRDD, classes)
+			filteredRDD.foreach(entry => {
+				Evaluate.predictEntry(entry, treeRDD, classes)
+			})
 			// TODO remove!
 			ssc.stop
 			treeRDD
