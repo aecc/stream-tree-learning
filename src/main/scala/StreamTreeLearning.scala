@@ -69,16 +69,17 @@ object StreamTreeLearning {
 					if (tuple._1 == tuple._2) 0
 					else 1
 				}).reduce(_+_).toDouble / filteredRDD.count
+				
 				logger.info("Finished the evaluation part [4/4]")
 				logger.info("The error of the prediction is: " + error)
-				
+		
 				filteredRDD.unpersist(false)
 				// TODO remove!
 				//ssc.stop
-				treeRDD
+				rdd.context.parallelize(Array(error))
 			} else {
 				logger.info("No data. Nothing to do")
-				null
+				rdd.context.parallelize(Array(1.0))
 			}
 		})
 		
@@ -90,8 +91,8 @@ object StreamTreeLearning {
 			} 
 		}).print
 		*/
-		
-		filtered.count
+
+		filtered.print
 		
 		// Start the computation
 		ssc.start()
