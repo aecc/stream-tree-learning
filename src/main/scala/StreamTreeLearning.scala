@@ -62,6 +62,7 @@ object StreamTreeLearning {
 				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
 				logger.info("Starting the evaluation part... [4/4]")
+				// TODO: right now doing it with same data, should be a different one
 				val evaluationRDD = filteredRDD.map(entry => {
 					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
 				})
@@ -75,7 +76,7 @@ object StreamTreeLearning {
 		
 				filteredRDD.unpersist(false)
 				// TODO remove!
-				//ssc.stop
+				ssc.stop
 				rdd.context.parallelize(Array(error))
 			} else {
 				logger.info("No data. Nothing to do")
