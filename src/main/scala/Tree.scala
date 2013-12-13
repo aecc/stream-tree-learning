@@ -8,6 +8,7 @@ import org.apache.spark.streaming.DStream
 import org.apache.spark.Accumulable
 import scala.collection.mutable.Queue
 import org.apache.log4j.Logger
+import org.apache.log4j.Level
 
 /**
  * @author aecc
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger
 object Tree {
 	
 	val logger = Logger.getLogger(getClass().getName());
+	logger.setLevel(Level.INFO)
 	
 	/*
 	 * Main function for the creation of the tree 
@@ -26,8 +28,8 @@ object Tree {
 							classes: Array[String]) 
 							: RDD[Chain] = {
 		
-		logger.info("Creating the tree...")
-		logger.info("Initial data has " + dataRDD.count)
+		logger.debug("Creating the tree...")
+		logger.debug("Initial data has " + dataRDD.count)
 		dataRDD.persist
 		
 		// Max length of the tree
@@ -37,7 +39,7 @@ object Tree {
 		
 		// First split to get first best feature
 		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
-		logger.info("First Best split is " + feature)
+		logger.debug("First Best split is " + feature)
 		
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
@@ -51,9 +53,9 @@ object Tree {
 		var i = 1
 		while (i <= max_depth) {
 
-			logger.info("Creating branches at depth "+i+"...")
+			logger.debug("Creating branches at depth "+i+"...")
 			
-			logger.info("ChainSet has length: " + chainSet.count)
+			logger.debug("ChainSet has length: " + chainSet.count)
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
@@ -67,13 +69,13 @@ object Tree {
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => { attribute_values.value.checkEntryAttributesValues(entry, attrs.value) })
-					logger.info("Data in this RDD is of size " + sampleRDD.count)
+					logger.debug("Data in this RDD is of size " + sampleRDD.count)
 					sampleRDD.persist
 					
 					// Find the best split among the attributes remaining
 					val ((feature,values),entropies) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
 					
-					logger.info("Best split is " + feature)
+					logger.debug("Best split is " + feature)
 					
 					var j = 0
 					
@@ -124,11 +126,11 @@ object Tree {
 			})
 		
 		
-			logger.info("Adding new chains... Number: " + chains_accum.value.length)
+			logger.debug("Adding new chains... Number: " + chains_accum.value.length)
 			
 			// Add new chains discovered to the chainSet. 
 			chainSet ++= dataRDD.context.parallelize(chains_accum.value)
-			logger.info("After adding chains chainSet has length: " + chainSet.count)
+			logger.debug("After adding chains chainSet has length: " + chainSet.count)
 			chains_accum.value.clear
 			
 			i = i+1
@@ -136,7 +138,7 @@ object Tree {
 		
 		// Fiilter to obtain only chains with leaves
 		val filtered_chainSet = chainSet.filter(chain => chain.leaf)
-		logger.info("Final size of chainSet: " + filtered_chainSet.count)
+		logger.debug("Final size of chainSet: " + filtered_chainSet.count)
 		//filtered_chainSet.foreach(chain => println(chain.chain))
 		
 		filtered_chainSet

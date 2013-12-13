@@ -9,6 +9,7 @@ import org.apache.log4j._
 object StreamTreeLearning {
   
 	val logger = Logger.getLogger(getClass().getName());
+	logger.setLevel(Level.INFO)
 	
 	def main(args: Array[String]) {
 	  
@@ -63,10 +64,7 @@ object StreamTreeLearning {
 				})
 				val error = evaluationRDD.map(tuple => {
 					if (tuple._1 == tuple._2) 0
-					else {
-						logger.info("Error in prediction found")
-						1
-					}
+					else 1
 				}).reduce(_+_).toDouble / filteredRDD.count
 				logger.info("Finished the evaluation part")
 				logger.info("The error of the prediction is: " + error)
