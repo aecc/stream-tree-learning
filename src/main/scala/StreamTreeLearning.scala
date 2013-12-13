@@ -44,10 +44,10 @@ object StreamTreeLearning {
 		// TODO: Change to DStream
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
-			val filteredRDD = FilterProcess.filter(rdd,k_param)
-			filteredRDD.persist
-			logger.info("Number of entries in this RDD: " + filteredRDD.count)
-			if (filteredRDD.count != 0) {
+			logger.info("Number of entries in this RDD: " + rdd.count)
+			if (rdd.count != 0) {
+				val filteredRDD = FilterProcess.filter(rdd,k_param)
+				filteredRDD.persist
 				logger.info("Finished filtering data [1/3]")
 				val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
 				logger.info("Finished mixing with old data [2/3]")
@@ -65,7 +65,7 @@ object StreamTreeLearning {
 				ssc.stop
 				treeRDD
 			} else {
-				rdd
+				null
 			}
 		})
 		
