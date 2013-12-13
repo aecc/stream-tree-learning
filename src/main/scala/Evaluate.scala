@@ -27,6 +27,7 @@ object Evaluate {
 						classes: Array[String]) 
 						: Int = {
 		
+		/*
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
 		logger.debug("chainSet size:" + chainSet.count)
@@ -55,6 +56,8 @@ object Evaluate {
 		} else {
 			classes.first
 		}
+		*/
+		0
 		
 	}
 }
