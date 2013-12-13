@@ -17,7 +17,7 @@ import org.apache.log4j.Level
 object Evaluate {
 
 	val logger = Logger.getLogger(getClass().getName());
-	logger.setLevel(Level.DEBUG)
+	logger.setLevel(Level.INFO)
 	
 	/*
 	 * Give the class predicted from the decision tree
@@ -41,11 +41,20 @@ object Evaluate {
 			}
 		}).filter(clas => clas != -1)
 		
+		/*
+		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
+		 */
+		
 		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
 		logger.debug("Number of coincidences in chains:" + classes.count)
 		logger.debug("Predicted class:" + classes.first)		
 		
-		classes.first
+		//TODO: fix!
+		if (classes.count == 0){
+			0
+		} else {
+			classes.first
+		}
 		
 	}
 }
