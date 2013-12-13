@@ -76,7 +76,7 @@ object StreamTreeLearning {
 		
 				filteredRDD.unpersist(false)
 				// TODO remove!
-				ssc.stop
+				//ssc.stop
 				rdd.context.parallelize(Array(error))
 			} else {
 				logger.info("No data. Nothing to do")
