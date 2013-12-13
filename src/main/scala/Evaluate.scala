@@ -27,6 +27,7 @@ object Evaluate {
 		
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
+		/*
 		val classes = chainSet.map(chain => {
 			val attribute_vals = attribute_values.value
 			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
@@ -40,6 +41,6 @@ object Evaluate {
 		//logger.info("Number of coincidences in chains:" + classes.count)
 		//logger.info("Predicted class:" + classes.first)		
 		
-		classes.first
+		classes.first*/ 0
 	}
 }
