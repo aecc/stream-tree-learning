@@ -47,18 +47,21 @@ object StreamTreeLearning {
 		val filtered = reddits_stream.transform(rdd => {
 			logger.info("Number of entries in this RDD: " + rdd.count)
 			if (rdd.count != 0) {
+				logger.info("Starting filtering data... [1/4]")
 				val filteredRDD = FilterProcess.filter(rdd,k_param)
 				filteredRDD.persist
-				logger.info("Finished filtering data [1/3]")
+				logger.info("Finished filtering data [1/4]")
+				logger.info("Starting mixing with old data... [2/4]")
 				val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
-				logger.info("Finished mixing with old data [2/3]")
+				logger.info("Finished mixing with old data [2/4]")
 				// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				reposts.persist
+				logger.info("Starting decision tree making... [3/4]")
 				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 				val chainSet = treeRDD.context.broadcast(treeRDD)
-				logger.info("Finished decision tree making [3/3]")
-				logger.info("Starting the evaluation part...")
+				logger.info("Finished decision tree making [3/4]")
+				logger.info("Starting the evaluation part... [4/4]")
 				val evaluationRDD = filteredRDD.map(entry => {
 					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
 				})
@@ -66,15 +69,15 @@ object StreamTreeLearning {
 					if (tuple._1 == tuple._2) 0
 					else 1
 				}).reduce(_+_).toDouble / filteredRDD.count
-				logger.info("Finished the evaluation part")
+				logger.info("Finished the evaluation part [4/4]")
 				logger.info("The error of the prediction is: " + error)
 				
 				filteredRDD.unpersist(false)
 				// TODO remove!
-				ssc.stop
+				//ssc.stop
 				treeRDD
 			} else {
-				logger.info("Nothing to do...")
+				logger.info("No data. Nothing to do")
 				null
 			}
 		})
