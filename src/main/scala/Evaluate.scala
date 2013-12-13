@@ -24,7 +24,7 @@ object Evaluate {
 						chainSet: RDD[Chain], 
 						classes: Array[String]) 
 						: Int = {
-		/*
+		
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
 		val classes = chainSet.map(chain => {
@@ -42,7 +42,6 @@ object Evaluate {
 		logger.info("Number of coincidences in chains:" + classes.count)
 		logger.info("Predicted class:" + classes.first)		
 		
-		classes.first*/
-		0
+		classes.first
 	}
 }

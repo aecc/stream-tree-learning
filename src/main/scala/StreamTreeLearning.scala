@@ -55,10 +55,11 @@ object StreamTreeLearning {
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				reposts.persist
 				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
+				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/3]")
 				filteredRDD.foreach(entry => {
 					logger.info("Evaluating entry...")
-					Evaluate.predictEntry(entry, treeRDD, classes)
+					Evaluate.predictEntry(entry, chainSet.value, classes)
 				})
 				filteredRDD.unpersist(false)
 				// TODO remove!
