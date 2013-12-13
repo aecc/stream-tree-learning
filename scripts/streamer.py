@@ -20,7 +20,7 @@ while True:
     with open('../files/redditSubmissions-sorted-date.csv') as fp:
         last_pos = fp.tell()
         for line in fp:
-            if i>199:
+            if i>2:
                 i=0
                 time.sleep(1)
                 print('New chunk sent')
