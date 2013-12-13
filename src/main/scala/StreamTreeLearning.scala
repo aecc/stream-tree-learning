@@ -46,6 +46,7 @@ object StreamTreeLearning {
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
 			filteredRDD.persist
+			logger.info("Number of entries in this RDD: " + filteredRDD.count)
 			logger.info("Finished filtering data [1/3]")
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
 			logger.info("Finished mixing with old data [2/3]")
