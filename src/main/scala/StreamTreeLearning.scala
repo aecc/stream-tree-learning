@@ -47,22 +47,26 @@ object StreamTreeLearning {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
 			filteredRDD.persist
 			logger.info("Number of entries in this RDD: " + filteredRDD.count)
-			logger.info("Finished filtering data [1/3]")
-			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
-			logger.info("Finished mixing with old data [2/3]")
-			// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
-			//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
-			reposts.persist
-			val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
-			logger.info("Finished decision tree making [3/3]")
-			filteredRDD.foreach(entry => {
-				logger.info("Evaluating entry...")
-				Evaluate.predictEntry(entry, treeRDD, classes)
-			})
-			filteredRDD.unpersist(false)
-			// TODO remove!
-			ssc.stop
-			treeRDD
+			if (filteredRDD.count != 0) {
+				logger.info("Finished filtering data [1/3]")
+				val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
+				logger.info("Finished mixing with old data [2/3]")
+				// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
+				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
+				reposts.persist
+				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
+				logger.info("Finished decision tree making [3/3]")
+				filteredRDD.foreach(entry => {
+					logger.info("Evaluating entry...")
+					Evaluate.predictEntry(entry, treeRDD, classes)
+				})
+				filteredRDD.unpersist(false)
+				// TODO remove!
+				ssc.stop
+				treeRDD
+			} else {
+				rdd
+			}
 		})
 		
 		// TODO: remove
