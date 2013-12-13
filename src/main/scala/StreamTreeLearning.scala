@@ -66,6 +66,7 @@ object StreamTreeLearning {
 				ssc.stop
 				treeRDD
 			} else {
+				logger.info("Nothing to do...")
 				null
 			}
 		})
