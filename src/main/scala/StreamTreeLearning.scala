@@ -23,7 +23,7 @@ object StreamTreeLearning {
 		logger.info("Logger is working!")
 		val ssc = new StreamingContext(	args(0), 
 										"StreamTreeLearning", 
-										Seconds(2), 
+										Seconds(60), 
 										System.getenv("SPARK_HOME"), 
 										List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"),
 										Map())

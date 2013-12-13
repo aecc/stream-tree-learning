@@ -4,8 +4,8 @@ stream-tree-learning
 Distributed Decision Tree Prediction of Streaming Data using Spark.
 
 Currently application does the following: Complete creation of the decision tree, without streaming.
-Modules in DEVELOPMENT, they will be added to the main application as soon as they are tested and work properly.
-Modules work and can be tested by shell.
+
+function Evaluate.predictEntry has a BUG that hasn't been fixed! not working completely.
 
 TO RUN THE APPLICATION (Compiles automatically):
 ----------------------
