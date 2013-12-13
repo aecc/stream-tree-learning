@@ -35,10 +35,10 @@ object Evaluate {
 				-1
 			}
 		}).filter(clas => clas != -1)
-		logger.info("Number of Chains:" + chainSet.count)
-		logger.info("Entry:" + entry._2._1.mkString(","))
-		logger.info("Number of coincidences in chains:" + classes.count)
-		logger.info("Predicted class:" + classes.first)		
+		
+		//logger.info("Entry: (" + entry._2._1.mkString(",") + ")")
+		//logger.info("Number of coincidences in chains:" + classes.count)
+		//logger.info("Predicted class:" + classes.first)		
 		
 		classes.first
 	}

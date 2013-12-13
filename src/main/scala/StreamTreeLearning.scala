@@ -57,10 +57,17 @@ object StreamTreeLearning {
 				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/3]")
-				filteredRDD.foreach(entry => {
-					logger.info("Evaluating entry...")
-					Evaluate.predictEntry(entry, chainSet.value, classes)
+				logger.info("Starting the evaluation part...")
+				val evaluationRDD = filteredRDD.map(entry => {
+					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
 				})
+				val error = evaluationRDD.map(tuple => {
+					if (tuple._1 == tuple._2) 0
+					else 1
+				}).reduce(_+_).toDouble / filteredRDD.count
+				logger.info("Finished the evaluation part")
+				logger.info("The error of the prediction is: " + error)
+				
 				filteredRDD.unpersist(false)
 				// TODO remove!
 				ssc.stop
