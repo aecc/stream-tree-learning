@@ -91,7 +91,7 @@ object StreamTreeLearning {
 		}).print
 		*/
 		
-		filtered.print
+		filtered.count
 		
 		// Start the computation
 		ssc.start()
