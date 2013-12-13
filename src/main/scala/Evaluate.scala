@@ -43,8 +43,9 @@ object Evaluate {
 		
 		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
 		logger.debug("Number of coincidences in chains:" + classes.count)
-		//logger.debug("Predicted class:" + classes.first)		
+		logger.debug("Predicted class:" + classes.first)		
 		
-		/*classes.first*/ 0
+		classes.first
+		
 	}
 }
