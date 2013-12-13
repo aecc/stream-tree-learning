@@ -45,6 +45,7 @@ object StreamTreeLearning {
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
 			val filteredRDD = FilterProcess.filter(rdd,k_param)
+			filteredRDD.persist
 			logger.info("Finished filtering data [1/3]")
 			val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
 			logger.info("Finished mixing with old data [2/3]")
@@ -54,8 +55,10 @@ object StreamTreeLearning {
 			val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 			logger.info("Finished decision tree making [3/3]")
 			filteredRDD.foreach(entry => {
+				logger.info("Evaluating entry...")
 				Evaluate.predictEntry(entry, treeRDD, classes)
 			})
+			filteredRDD.unpersist(false)
 			// TODO remove!
 			ssc.stop
 			treeRDD
