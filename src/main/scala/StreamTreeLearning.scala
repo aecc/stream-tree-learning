@@ -52,6 +52,7 @@ object StreamTreeLearning {
 				logger.info("Starting filtering data... [1/4]")
 				val filteredRDD = FilterProcess.filter(rdd,k_param)
 				filteredRDD.persist
+				/*
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
 				//val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
@@ -74,14 +75,14 @@ object StreamTreeLearning {
 					if (tuple._1 == tuple._2) 0
 					else 1
 				}).reduce(_+_).toDouble / filteredRDD.count
-				
+				*/
 				logger.info("Finished the evaluation part [4/4]")
-				logger.info("The error of the prediction is: " + error)
+				logger.info("The error of the prediction is: " + filteredRDD.count)
 		
 				//filteredRDD.unpersist(false)
 				// TODO remove!
 				//ssc.stop
-				rdd.context.parallelize(Array(error))
+				rdd.context.parallelize(Array(1.0))
 			} else {
 				logger.info("No data. Nothing to do")
 				rdd.context.parallelize(Array(1.0))
