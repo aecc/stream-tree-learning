@@ -17,7 +17,7 @@ import org.apache.log4j.Level
 object Evaluate {
 
 	val logger = Logger.getLogger(getClass().getName());
-	logger.setLevel(Level.DEBUG)
+	logger.setLevel(Level.INFO)
 	
 	/*
 	 * Give the class predicted from the decision tree
