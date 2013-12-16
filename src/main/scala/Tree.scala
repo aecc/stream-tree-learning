@@ -60,7 +60,7 @@ object Tree {
 				
 				
 				if (!chain.leaf) {
-
+					
 					val dataRDD = dataRDD_broadcast.value
 					try {
 					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
@@ -69,6 +69,7 @@ object Tree {
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => {
+						println(entry)
 						try {
 						attribute_values.value.checkEntryAttributesValues(entry, attrs.value) 
 					} catch {
