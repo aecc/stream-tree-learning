@@ -58,7 +58,7 @@ object Tree {
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
-				try {
+				
 				if (!chain.leaf) {
 
 					val dataRDD = dataRDD_broadcast.value
@@ -93,7 +93,7 @@ object Tree {
 							// If this was the last attribute to split
 							if (possible_attributes.length==1) {
 								
-								
+								try {
 										new_chain.leaf = true
 										val attrs = StreamTreeLearning.sc.broadcast(Array((feature,value)))
 										
@@ -109,6 +109,7 @@ object Tree {
 												}
 											})									
 										
+											
 		
 										val feature_entries = sampleRDD.count
 		
@@ -122,7 +123,12 @@ object Tree {
 											new_chain.data_class = max._1
 									
 								
-								
+								} catch {
+					case e: Exception => {
+						println("ERROR2: " + sampleRDD)
+						e.printStackTrace()
+					}
+				}
 
 							} else {
 								// TODO: ?
@@ -139,12 +145,7 @@ object Tree {
 					}
 					
 				}
-				} catch {
-					case e: Exception => {
-						println("ERROR2: " + sampleRDD)
-						e.printStackTrace()
-					}
-				}
+				
 			
 			})
 		
