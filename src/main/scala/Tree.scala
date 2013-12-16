@@ -124,7 +124,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR")
+						println("ERROR:" + chain.chain)
 						e.printStackTrace()
 					}
 				}
