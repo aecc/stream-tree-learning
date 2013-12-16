@@ -38,7 +38,7 @@ object Tree {
 		
 		// First split to get first best feature
 		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
-		logger.debug("First Best split is " + feature)
+		logger.debug("First Best split is " + feature + " " + values.length)
 		
 		// Start the tree building. A chain on each value
 		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
