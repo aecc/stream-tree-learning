@@ -64,14 +64,15 @@ object StreamTreeLearning {
 				logger.info("Starting decision tree making... [3/4]")
 				val treeRDD = Tree.makeDecisionTree(filteredRDD, attributes, classes)
 				treeRDD.persist
-				/*
-				val chainSet = treeRDD.context.broadcast(treeRDD)
+				
+				val chainSet = sc.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
 				logger.info("Starting the evaluation part... [4/4]")
 				// TODO: right now doing it with same data, should be a different one
 				val evaluationRDD = filteredRDD.map(entry => {
 					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
 				})
+				/*
 				val error = evaluationRDD.map(tuple => {
 					if (tuple._1 == tuple._2) 0
 					else 1
