@@ -124,7 +124,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR:" + dataRDD)
+						println("ERROR:" + attrs + " " + attribute_values)
 						e.printStackTrace()
 					}
 				}
