@@ -124,7 +124,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR:" + chain.chain)
+						println("ERROR:" + dataRDD.context)
 						e.printStackTrace()
 					}
 				}
@@ -144,7 +144,7 @@ object Tree {
 		
 		// Fiilter to obtain only chains with leaves
 		val filtered_chainSet = chainSet.filter(chain => chain.leaf)
-		logger.debug("Final size of chainSet: " + dataRDD.context)
+		logger.debug("Final size of chainSet: " + filtered_chainSet.count)
 		//filtered_chainSet.foreach(chain => println(chain.chain))
 		
 		filtered_chainSet
