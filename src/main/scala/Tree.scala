@@ -58,11 +58,11 @@ object Tree {
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
-				try {
+				
 				if (!chain.leaf) {
 
 					val dataRDD = dataRDD_broadcast.value
-					
+					try {
 					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
@@ -140,14 +140,15 @@ object Tree {
 						j = j+1
 	
 					}
-					
-				}
-				} catch {
+					} catch {
 					case e: Exception => {
 						println("ERROR2: ")
 						e.printStackTrace()
 					}
 				}
+					
+				}
+				
 			
 			})
 		
