@@ -40,7 +40,7 @@ object StreamTreeLearning {
 		val classes = Array("Reposted_Less_Than_K","Reposted_More_Equal_Than_K")
 		
 		// External data structure to save reposts per image_id
-		var reposts = ssc.sparkContext.parallelize(Array((0,0)))
+		//var reposts = ssc.sparkContext.parallelize(Array((0,0)))
 		
 		logger.info("Starting the stream process...")
 		
@@ -52,7 +52,7 @@ object StreamTreeLearning {
 				logger.info("Starting filtering data... [1/4]")
 				val filteredRDD = FilterProcess.filter(rdd,k_param)
 				filteredRDD.persist
-				/*
+				
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
 				//val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
@@ -60,10 +60,11 @@ object StreamTreeLearning {
 				logger.info("Finished mixing with old data [2/4]")
 				// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
-				reposts.persist
+				//reposts.persist
 				logger.info("Starting decision tree making... [3/4]")
 				val treeRDD = Tree.makeDecisionTree(filteredRDD, attributes, classes)
 				treeRDD.persist
+				/*
 				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
 				logger.info("Starting the evaluation part... [4/4]")
@@ -77,7 +78,7 @@ object StreamTreeLearning {
 				}).reduce(_+_).toDouble / filteredRDD.count
 				*/
 				logger.info("Finished the evaluation part [4/4]")
-				logger.info("The error of the prediction is: " + filteredRDD.count)
+				logger.info("The error of the prediction is: " + treeRDD.count)
 		
 				//filteredRDD.unpersist(false)
 				// TODO remove!
