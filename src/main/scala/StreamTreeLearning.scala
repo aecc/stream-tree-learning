@@ -76,7 +76,7 @@ object StreamTreeLearning {
 				logger.info("Finished the evaluation part [4/4]")
 				logger.info("The error of the prediction is: " + error)
 		
-				filteredRDD.unpersist(false)
+				//filteredRDD.unpersist(false)
 				// TODO remove!
 				//ssc.stop
 				rdd.context.parallelize(Array(error))
