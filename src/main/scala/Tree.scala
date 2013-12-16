@@ -94,28 +94,28 @@ object Tree {
 							if (possible_attributes.length==1) {
 								
 								try {
-								new_chain.leaf = true
-								val attrs = StreamTreeLearning.sc.broadcast(Array((feature,value)))
-								
-									val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})									
-								
-
-								val feature_entries = sampleRDD.count
-
-								// We assign class using majority of data entries
-								val numbers = (0 until classes.size).toArray
-								val entries_count = numbers.map(number => {
-									(number,Helper.filterByClass(value_data, number).count)
-								})
-								val max = entries_count.maxBy(_._2)
-								if (max._2!=0)
-									new_chain.data_class = max._1
+										new_chain.leaf = true
+										val attrs = StreamTreeLearning.sc.broadcast(Array((feature,value)))
+										
+											val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})									
+										
+		
+										val feature_entries = sampleRDD.count
+		
+										// We assign class using majority of data entries
+										val numbers = (0 until classes.size).toArray
+										val entries_count = numbers.map(number => {
+											(number,Helper.filterByClass(value_data, number).count)
+										})
+										val max = entries_count.maxBy(_._2)
+										if (max._2!=0)
+											new_chain.data_class = max._1
 									
 									} catch {
-									case e: Exception => {
-										println("ERROR:" + attrs + " " + attribute_values)
-										e.printStackTrace()
-									}
+										case e: Exception => {
+											println("ERROR1:" + attrs + " " + attribute_values)
+											e.printStackTrace()
+										}
 								}
 
 							} else {
@@ -135,7 +135,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR:")
+						println("ERROR2:")
 						e.printStackTrace()
 					}
 				}
