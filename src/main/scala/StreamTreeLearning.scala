@@ -54,14 +54,14 @@ object StreamTreeLearning {
 				filteredRDD.persist
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
-				val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
-				mixedRDD.persist
+				//val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
+				//mixedRDD.persist
 				logger.info("Finished mixing with old data [2/4]")
 				// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				reposts.persist
 				logger.info("Starting decision tree making... [3/4]")
-				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
+				val treeRDD = Tree.makeDecisionTree(filteredRDD, attributes, classes)
 				treeRDD.persist
 				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
