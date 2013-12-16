@@ -30,7 +30,6 @@ object Tree {
 		
 		logger.debug("Creating the tree...")
 		logger.debug("Initial data has " + dataRDD.count)
-		dataRDD.persist
 		
 		// Max length of the tree
 		val max_depth = attributes.length

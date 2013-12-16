@@ -53,6 +53,7 @@ object StreamTreeLearning {
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
 				val mixedRDD = FilterProcess.mixReposts(filteredRDD, reposts, k_param)
+				mixedRDD.persist
 				logger.info("Finished mixing with old data [2/4]")
 				// TODO: EXTREMELY UNEFFICIENT, MAYBE A BOUNDED SET reposts
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
