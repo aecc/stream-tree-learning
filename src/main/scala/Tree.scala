@@ -65,21 +65,21 @@ object Tree {
 					try {
 					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
 					
-					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
+					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray)
 					
-					// We filter data according to the attributes in the chain
-					val sampleRDD = dataRDD.filter(entry => {
-						println(entry)
-						try {
-						attribute_values.value.checkEntryAttributesValues(entry, attrs.value) 
-					} catch {
+					try {
+						dataRDD.count
+						} catch {
 												case e: Exception => {
-													println("ERROR1:" + attrs + " " + attribute_values)
+													println("ERRORR:" + dataRDD)
 													e.printStackTrace()
 													true
 												}
 												}	
-					})
+				
+					
+					// We filter data according to the attributes in the chain
+					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 					sampleRDD.persist
 					logger.debug("Data in this RDD is of size " + sampleRDD.count)
 					
