@@ -31,11 +31,12 @@ object Evaluate {
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
 		//logger.debug("chainSet size:" + chainSet.count)
+		val entry_bc = chainSet.context.broadcast(entry)
 		
 		val classes = chainSet.map(chain => {
 			
 			val attribute_vals = attribute_values.value
-			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
+			if (attribute_vals.checkEntryAttributesValues(entry_bc.value, chain.chain.toArray)){
 				chain.data_class
 			} else {
 				-1
