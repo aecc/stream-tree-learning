@@ -58,6 +58,7 @@ object Tree {
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
+				try {
 				if (!chain.leaf) {
 
 					val dataRDD = dataRDD_broadcast.value
@@ -120,6 +121,12 @@ object Tree {
 	
 					}
 					
+				}
+				} catch {
+					case e: Exception => {
+						println("ERROR")
+						e.printStackTrace()
+					}
 				}
 			
 			})
