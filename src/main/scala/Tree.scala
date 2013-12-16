@@ -61,17 +61,17 @@ object Tree {
 				
 				if (!chain.leaf) {
 					
-					val dataRDD = dataRDD_broadcast.value
+					val dataRDD2 = dataRDD_broadcast.value
 					try {
 					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray)
 					
 					try {
-						dataRDD.count
+						dataRDD2.count
 						} catch {
 												case e: Exception => {
-													println("ERRORR:" + dataRDD)
+													println("ERRORR:" + dataRDD2)
 													e.printStackTrace()
 													true
 												}
@@ -79,7 +79,7 @@ object Tree {
 				
 					
 					// We filter data according to the attributes in the chain
-					val sampleRDD = dataRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
+					val sampleRDD = dataRDD2.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 					sampleRDD.persist
 					logger.debug("Data in this RDD is of size " + sampleRDD.count)
 					
@@ -143,7 +143,7 @@ object Tree {
 					}
 					} catch {
 					case e: Exception => {
-						println("ERROR2: " + dataRDD)
+						println("ERROR2: " + dataRDD2)
 						e.printStackTrace()
 					}
 				}
