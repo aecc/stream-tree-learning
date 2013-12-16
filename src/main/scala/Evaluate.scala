@@ -42,6 +42,7 @@ object Evaluate {
 			}
 		}).filter(clas => clas != -1)
 		
+		classes.persist
 		/*
 		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
 		 */
