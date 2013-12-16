@@ -58,7 +58,7 @@ object Tree {
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
-				
+				try {
 				if (!chain.leaf) {
 
 					val dataRDD = dataRDD_broadcast.value
@@ -109,7 +109,6 @@ object Tree {
 												}
 											})									
 										
-											
 		
 										val feature_entries = sampleRDD.count
 		
@@ -122,13 +121,13 @@ object Tree {
 										if (max._2!=0)
 											new_chain.data_class = max._1
 									
-								
-								} catch {
+										} catch {
 					case e: Exception => {
-						println("ERROR2: " + sampleRDD)
+						println("ERROR3: ")
 						e.printStackTrace()
 					}
 				}
+								
 
 							} else {
 								// TODO: ?
@@ -145,7 +144,12 @@ object Tree {
 					}
 					
 				}
-				
+				} catch {
+					case e: Exception => {
+						println("ERROR2: " + sampleRDD)
+						e.printStackTrace()
+					}
+				}
 			
 			})
 		
