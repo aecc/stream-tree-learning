@@ -123,7 +123,7 @@ object Tree {
 									
 										} catch {
 					case e: Exception => {
-						println("ERROR3: ")
+						println("ERROR3: " + sampleRDD)
 						e.printStackTrace()
 					}
 				}
@@ -146,7 +146,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR2: " + sampleRDD)
+						println("ERROR2: ")
 						e.printStackTrace()
 					}
 				}
