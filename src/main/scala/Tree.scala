@@ -69,8 +69,8 @@ object Tree {
 					
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD.filter(entry => { attribute_values.value.checkEntryAttributesValues(entry, attrs.value) })
-					logger.debug("Data in this RDD is of size " + sampleRDD.count)
 					sampleRDD.persist
+					logger.debug("Data in this RDD is of size " + sampleRDD.count)
 					
 					// Find the best split among the attributes remaining
 					val ((feature,values),entropies) = BestSplit.bestSplit(sampleRDD, chain.entropy, possible_attributes, attribute_values, classes)
@@ -124,7 +124,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR:" + StreamTreeLearning.sc)
+						println("ERROR:" + dataRDD)
 						e.printStackTrace()
 					}
 				}
