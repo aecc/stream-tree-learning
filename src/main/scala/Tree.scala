@@ -34,20 +34,20 @@ object Tree {
 		// Max length of the tree
 		val max_depth = attributes.length
 		
-		val attribute_values = dataRDD.context.broadcast(new AttributeValues(attributes))
+		val attribute_values = StreamTreeLearning.sc.broadcast(new AttributeValues(attributes))
 		
 		// First split to get first best feature
 		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
 		logger.debug("First Best split is " + feature + " " + values.length)
 		
 		// Start the tree building. A chain on each value
-		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
+		var chainSet = StreamTreeLearning.sc.parallelize(values).map(value => new Chain(feature,value))
 		
 		// Accumulator for chains
-		val chains_accum = dataRDD.context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
+		val chains_accum = StreamTreeLearning.sc.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
 			
 		// We broadcast all the filtered data in the stream	
-		val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
+		val dataRDD_broadcast = StreamTreeLearning.sc.broadcast(dataRDD)
 		
 		var i = 1
 		while (i <= max_depth) {
@@ -63,7 +63,7 @@ object Tree {
 
 					val dataRDD = dataRDD_broadcast.value
 					
-					val attrs = dataRDD.context.broadcast(chain.getAttributes)
+					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
@@ -94,7 +94,7 @@ object Tree {
 							if (possible_attributes.length==1) {
 								
 								new_chain.leaf = true
-								val attrs = sampleRDD.context.broadcast(Array((feature,value)))
+								val attrs = StreamTreeLearning.sc.broadcast(Array((feature,value)))
 								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 								val feature_entries = sampleRDD.count
 
@@ -124,7 +124,7 @@ object Tree {
 				}
 				} catch {
 					case e: Exception => {
-						println("ERROR:" + dataRDD)
+						println("ERROR:" + StreamTreeLearning.sc)
 						e.printStackTrace()
 					}
 				}
@@ -135,7 +135,7 @@ object Tree {
 			logger.debug("Adding new chains... Number: " + chains_accum.value.length)
 			
 			// Add new chains discovered to the chainSet. 
-			chainSet ++= dataRDD.context.parallelize(chains_accum.value)
+			chainSet ++= StreamTreeLearning.sc.parallelize(chains_accum.value)
 			logger.debug("After adding chains chainSet has length: " + chainSet.count)
 			chains_accum.value.clear
 			

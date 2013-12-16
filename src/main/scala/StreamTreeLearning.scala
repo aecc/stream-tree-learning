@@ -8,6 +8,7 @@ import org.apache.log4j._
 
 object StreamTreeLearning {
   
+	var sc : SparkContext = _
 	val logger = Logger.getLogger(getClass().getName());
 	logger.setLevel(Level.INFO)
 	
@@ -27,6 +28,7 @@ object StreamTreeLearning {
 										System.getenv("SPARK_HOME"), 
 										List("target/scala-2.9.3/stream-tree-learning_2.9.3-1.0.jar"),
 										Map())
+		sc = ssc.sparkContext
 
 		val reddits_stream = ssc.socketTextStream(args(1), args(2).toInt)
 		
