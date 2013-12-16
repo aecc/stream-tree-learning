@@ -16,8 +16,8 @@ import org.apache.log4j.Level
  */
 object Evaluate {
 
-	val logger = Logger.getLogger(getClass().getName());
-	logger.setLevel(Level.DEBUG)
+	//val logger = Logger.getLogger(getClass().getName());
+	//logger.setLevel(Level.DEBUG)
 	
 	/*
 	 * Give the class predicted from the decision tree
@@ -30,7 +30,7 @@ object Evaluate {
 		
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
-		logger.debug("chainSet size:" + chainSet.count)
+		//logger.debug("chainSet size:" + chainSet.count)
 		
 		val classes = chainSet.map(chain => {
 			
@@ -47,9 +47,9 @@ object Evaluate {
 		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
 		 */
 		
-		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
-		logger.debug("Number of coincidences in chains:" + classes.count)
-		logger.debug("Predicted class:" + classes.first)		
+		//logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
+		//logger.debug("Number of coincidences in chains:" + classes.count)
+		//logger.debug("Predicted class:" + classes.first)		
 		
 		//TODO: fix!
 		if (classes.count == 0){
