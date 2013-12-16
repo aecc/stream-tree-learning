@@ -72,6 +72,7 @@ object StreamTreeLearning {
 				val evaluationRDD = filteredRDD.map(entry => {
 					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
 				})
+				evaluationRDD.count
 				/*
 				val error = evaluationRDD.map(tuple => {
 					if (tuple._1 == tuple._2) 0
