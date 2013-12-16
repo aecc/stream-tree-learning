@@ -25,8 +25,7 @@ object Tree {
 	 */
 	def makeDecisionTree(	dataRDD: RDD[(Int, (Array[Int], Int, Int, Int))], 
 							attributes: Array[String], 
-							classes: Array[String],
-							context: SparkContext) 
+							classes: Array[String]) 
 							: RDD[Chain] = {
 		
 		logger.debug("Creating the tree...")
@@ -35,20 +34,20 @@ object Tree {
 		// Max length of the tree
 		val max_depth = attributes.length
 		
-		val attribute_values = context.broadcast(new AttributeValues(attributes))
+		val attribute_values = dataRDD.context.broadcast(new AttributeValues(attributes))
 		
 		// First split to get first best feature
 		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)
 		logger.debug("First Best split is " + feature + " " + values.length)
 		
 		// Start the tree building. A chain on each value
-		var chainSet = context.parallelize(values).map(value => new Chain(feature,value))
+		var chainSet = dataRDD.context.parallelize(values).map(value => new Chain(feature,value))
 		
 		// Accumulator for chains
-		val chains_accum = context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
+		val chains_accum = dataRDD.context.accumulableCollection[Queue[Chain],Chain](Queue[Chain]())	
 			
 		// We broadcast all the filtered data in the stream	
-		val dataRDD_broadcast = context.broadcast(dataRDD)
+		val dataRDD_broadcast = dataRDD.context.broadcast(dataRDD)
 		
 		var i = 1
 		while (i <= max_depth) {
@@ -64,7 +63,7 @@ object Tree {
 
 					val dataRDD = dataRDD_broadcast.value
 					
-					val attrs = context.broadcast(chain.getAttributes)
+					val attrs = dataRDD.context.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray) 
 					
@@ -95,7 +94,7 @@ object Tree {
 							if (possible_attributes.length==1) {
 								
 								new_chain.leaf = true
-								val attrs = context.broadcast(Array((feature,value)))
+								val attrs = sampleRDD.context.broadcast(Array((feature,value)))
 								val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 								val feature_entries = sampleRDD.count
 
@@ -145,7 +144,7 @@ object Tree {
 		
 		// Fiilter to obtain only chains with leaves
 		val filtered_chainSet = chainSet.filter(chain => chain.leaf)
-		logger.debug("Final size of chainSet: " + filtered_chainSet.count)
+		logger.debug("Final size of chainSet: " + dataRDD.context)
 		//filtered_chainSet.foreach(chain => println(chain.chain))
 		
 		filtered_chainSet

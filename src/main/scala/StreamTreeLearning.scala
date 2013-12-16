@@ -59,7 +59,7 @@ object StreamTreeLearning {
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				reposts.persist
 				logger.info("Starting decision tree making... [3/4]")
-				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes, rdd.context)
+				val treeRDD = Tree.makeDecisionTree(mixedRDD, attributes, classes)
 				treeRDD.persist
 				val chainSet = treeRDD.context.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
