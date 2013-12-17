@@ -67,10 +67,9 @@ object StreamTreeLearning {
 				val (lines_model,lines_test) = lines.splitAt(split_index.toInt)
 				
 				val modelRDD = sc.parallelize(lines_model)
-				println("model:" + modelRDD.count)
-				println("--")
+				logger.info("Number of entries to create the model: " + modelRDD.count)
 				val testRDD = sc.parallelize(lines_test)
-				println("test:" + testRDD.count)
+				logger.info("Number of entries to evaluate: " + testRDD.count)
 				
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
@@ -99,20 +98,20 @@ object StreamTreeLearning {
 				}).reduce(_+_).toDouble / testRDD.count
 				
 				logger.info("Finished the evaluation part [4/4]")
-				logger.info("The error of the prediction is: " + error)
+				logger.info("The error of the prediction using the tree created (chains=" + treeRDD.count + ") is: " + error)
 				
 				// We choose the best tree
 				if (bestRDD == null) {
 					bestRDD = treeRDD
 				} else {
 					val bestChainSet = sc.broadcast(bestRDD)
-					val bestError = filteredRDD.map(entry => {
+					val bestError = testRDD.map(entry => {
 									(entry._2._4, Evaluate.predictEntry(entry, bestChainSet.value, classes, attribute_values.value))
 									}).map(tuple => {
 									if (tuple._1 == tuple._2) 0
 									else 1
-									}).reduce(_+_).toDouble / filteredRDD.count
-					logger.info("The error of the prediction with the best tree is: " + bestError)
+									}).reduce(_+_).toDouble / testRDD.count
+					logger.info("The error of the prediction using the best tree so far (chains=" + bestRDD.count + ") is: " + bestError)
 					if (error < bestError) {
 						bestRDD = treeRDD
 						logger.info("A new tree has been set as the best one")
