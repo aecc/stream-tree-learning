@@ -36,13 +36,12 @@ object Evaluate {
 			
 			val attribute_vals = attribute_values.value
 			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
-				
 				chain.data_class
 			} else {
 				-1
 			}
 		}).filter(clas => clas != -1)
-		classes.count
+
 		/*
 		classes.persist
 		/*
@@ -52,15 +51,13 @@ object Evaluate {
 		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
 		logger.debug("Number of coincidences in chains:" + classes.count)
 		logger.debug("Predicted class:" + classes.first)		
-		
+		*/
 		//TODO: fix!
 		if (classes.count == 0){
 			0
 		} else {
 			classes.first
 		}
-		*/
-		0
 		
 	}
 }
