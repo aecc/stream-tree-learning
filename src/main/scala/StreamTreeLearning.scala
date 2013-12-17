@@ -55,9 +55,21 @@ object StreamTreeLearning {
 		val filtered = reddits_stream.transform(rdd => {
 			logger.info("Number of entries in this RDD: " + rdd.count)
 			if (rdd.count != 0) {
+								
+				//val rddModel = rdd.filter(f)
+				
 				logger.info("Starting filtering data... [1/4]")
-				val filteredRDD = FilterProcess.filter(rdd,k_param)
-				filteredRDD.persist
+				val filteredRDD = FilterProcess.filter(rdd,k_param).persist
+				
+				// We get 80% of the data for creating the model and 20% to evaluate
+				val lines = filteredRDD.collect
+				val split_index = (filteredRDD.count * 80)/100
+				val split_time = lines(split_index.toInt)._2._2
+				
+				val modelRDD = Helper.filterByTime(filteredRDD, split_time).persist
+				modelRDD.foreach(println)
+				val testRDD = filteredRDD.subtract(modelRDD).persist
+				testRDD.foreach(println)
 				
 				logger.info("Finished filtering data [1/4]")
 				logger.info("Starting mixing with old data... [2/4]")
@@ -68,15 +80,15 @@ object StreamTreeLearning {
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				//reposts.persist
 				logger.info("Starting decision tree making... [3/4]")
-				val treeRDD = Tree.makeDecisionTree(filteredRDD, attribute_values.value, classes)
+				val treeRDD = Tree.makeDecisionTree(modelRDD, attribute_values.value, classes)
 				treeRDD.persist
 		
 				val chainSet = sc.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
 				logger.info("Starting the evaluation part... [4/4]")
-				// TODO: right now doing it with same data, should be a different one
 				
-				val evaluationRDD = filteredRDD.map(entry => {
+				// Evaluate the accuracy of the tree using the test Data
+				val evaluationRDD = testRDD.map(entry => {
 					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes, attribute_values.value))
 				})
 				
@@ -106,7 +118,6 @@ object StreamTreeLearning {
 					}
 				}
 
-				
 				rdd.context.parallelize(Array(error))
 			} else {
 				logger.info("No data. Nothing to do")
