@@ -31,17 +31,19 @@ object Evaluate {
 		val attribute_values = StreamTreeLearning.sc.broadcast(attrib_vals)
 		logger.debug("chainSet size:" + chainSet.count)
 		//val entry_bc = StreamTreeLearning.sc.broadcast(entry)
-		/*
+		
 		val classes = chainSet.map(chain => {
 			
 			val attribute_vals = attribute_values.value
 			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
-				chain.data_class
+				0
+				//chain.data_class
 			} else {
 				-1
 			}
 		}).filter(clas => clas != -1)
-		
+		classes.count
+		/*
 		classes.persist
 		/*
 		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
