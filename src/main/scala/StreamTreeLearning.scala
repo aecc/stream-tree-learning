@@ -73,7 +73,7 @@ object StreamTreeLearning {
 				// TODO: right now doing it with same data, should be a different one
 				
 				val evaluationRDD = filteredRDD.map(entry => {
-					(entry._2._4, 1)
+					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes, attribute_values.value))
 				})
 				evaluationRDD.count
 				/*
