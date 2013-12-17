@@ -23,7 +23,7 @@ while True:
             try:
                 print(line),
                 c.send(line)
-                time.sleep(2)
+                time.sleep(1)
                 i=i+1
             except socket.error, e:
                 print('Client disconnected\n')
