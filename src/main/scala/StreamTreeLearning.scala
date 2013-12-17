@@ -68,6 +68,7 @@ object StreamTreeLearning {
 				
 				val modelRDD = Helper.filterByTime(filteredRDD, split_time).persist
 				modelRDD.foreach(println)
+				println("--")
 				val testRDD = filteredRDD.subtract(modelRDD).persist
 				testRDD.foreach(println)
 				
