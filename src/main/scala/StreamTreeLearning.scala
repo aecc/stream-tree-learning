@@ -64,12 +64,12 @@ object StreamTreeLearning {
 				// We get 80% of the data for creating the model and 20% to evaluate
 				val lines = filteredRDD.collect
 				val split_index = (filteredRDD.count * 80)/100
-				val split_time = lines(split_index.toInt)._2._2
+				val (lines_model,lines_test) = lines.splitAt(split_index.toInt)
 				
-				val modelRDD = Helper.filterByTime(filteredRDD, split_time,true).persist
+				val modelRDD = sc.parallelize(lines_model)
 				println("model:" + modelRDD.count)
 				println("--")
-				val testRDD = Helper.filterByTime(filteredRDD, split_time,false).persist
+				val testRDD = sc.parallelize(lines_test)
 				println("test:" + testRDD.count)
 				
 				logger.info("Finished filtering data [1/4]")
@@ -96,7 +96,7 @@ object StreamTreeLearning {
 				val error = evaluationRDD.map(tuple => {
 					if (tuple._1 == tuple._2) 0
 					else 1
-				}).reduce(_+_).toDouble / filteredRDD.count
+				}).reduce(_+_).toDouble / testRDD.count
 				
 				logger.info("Finished the evaluation part [4/4]")
 				logger.info("The error of the prediction is: " + error)
