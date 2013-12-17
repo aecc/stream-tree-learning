@@ -36,8 +36,8 @@ object Evaluate {
 			
 			val attribute_vals = attribute_values.value
 			if (attribute_vals.checkEntryAttributesValues(entry, chain.chain.toArray)){
-				0
-				//chain.data_class
+				
+				chain.data_class
 			} else {
 				-1
 			}
