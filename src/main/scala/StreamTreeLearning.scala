@@ -66,10 +66,10 @@ object StreamTreeLearning {
 				val split_index = (filteredRDD.count * 80)/100
 				val split_time = lines(split_index.toInt)._2._2
 				
-				val modelRDD = Helper.filterByTime(filteredRDD, split_time).persist
+				val modelRDD = Helper.filterByTime(filteredRDD, split_time,true).persist
 				println("model:" + modelRDD.count)
 				println("--")
-				val testRDD = filteredRDD.subtract(modelRDD).persist
+				val testRDD = Helper.filterByTime(filteredRDD, split_time,false).persist
 				println("test:" + testRDD.count)
 				
 				logger.info("Finished filtering data [1/4]")
