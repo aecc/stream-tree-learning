@@ -43,16 +43,28 @@ object Helper {
 	/*
 	 * Filter by maximum unix time of the post 
 	 */
-	def filterByTime(data: RDD[(Int, (Array[Int], Int, Int, Int))], max_time: Int ) : RDD[(Int, (Array[Int], Int, Int, Int))] = {
-		val filtered = data.filter { 
-			case (_,(_,unixtime,_,_)) => {
-				if (unixtime<max_time) 
-					true
-				else
-					false
+	def filterByTime(data: RDD[(Int, (Array[Int], Int, Int, Int))], max_time: Int, less: Boolean ) : RDD[(Int, (Array[Int], Int, Int, Int))] = {
+		if (less) {
+			val filtered = data.filter { 
+				case (_,(_,unixtime,_,_)) => {
+					if (unixtime<max_time) 
+						true
+					else
+						false
+				}
 			}
+			filtered
+		} else {
+			val filtered = data.filter { 
+				case (_,(_,unixtime,_,_)) => {
+					if (unixtime>=max_time) 
+						true
+					else
+						false
+				}
+			}		
+			filtered
 		}
-		filtered
 	}
 	
 	/*
