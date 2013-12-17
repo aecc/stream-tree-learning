@@ -24,7 +24,7 @@ object Tree {
 	 * Returns an RDD of Chains
 	 */
 	def makeDecisionTree(	dataRDD: RDD[(Int, (Array[Int], Int, Int, Int))], 
-							attributes: Array[String], 
+							attributes: AttributeValues, 
 							classes: Array[String]) 
 							: RDD[Chain] = {
 		
@@ -32,9 +32,9 @@ object Tree {
 		logger.debug("Initial data has " + dataRDD.count)
 		
 		// Max length of the tree
-		val max_depth = attributes.length
+		val max_depth = attributes.attributes.size
 		
-		val attribute_values = StreamTreeLearning.sc.broadcast(new AttributeValues(attributes))
+		val attribute_values = StreamTreeLearning.sc.broadcast(attributes)
 		
 		// First split to get first best feature
 		val ((feature,values),entropies) = BestSplit.bestSplit(dataRDD, 1.0, attribute_values.value.attributes.toArray, attribute_values, classes)

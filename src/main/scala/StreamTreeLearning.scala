@@ -39,6 +39,8 @@ object StreamTreeLearning {
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val classes = Array("Reposted_Less_Than_K","Reposted_More_Equal_Than_K")
 		
+		val attribute_values = StreamTreeLearning.sc.broadcast(new AttributeValues(attributes))
+		
 		// External data structure to save reposts per image_id
 		//var reposts = ssc.sparkContext.parallelize(Array((0,0)))
 		
@@ -62,18 +64,19 @@ object StreamTreeLearning {
 				//reposts = FilterProcess.getRepostsByKey(filteredRDD, reposts)
 				//reposts.persist
 				logger.info("Starting decision tree making... [3/4]")
-				val treeRDD = Tree.makeDecisionTree(filteredRDD, attributes, classes)
+				val treeRDD = Tree.makeDecisionTree(filteredRDD, attribute_values.value, classes)
 				treeRDD.persist
-				treeRDD.count
+		
 				val chainSet = sc.broadcast(treeRDD)
 				logger.info("Finished decision tree making [3/4]")
 				logger.info("Starting the evaluation part... [4/4]")
 				// TODO: right now doing it with same data, should be a different one
-				/*
-				val evaluationRDD = filteredRDD.map(entry => {
-					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes))
-				})
 				
+				val evaluationRDD = filteredRDD.map(entry => {
+					(entry._2._4, Evaluate.predictEntry(entry, chainSet.value, classes, attribute_values.value))
+				})
+				evaluationRDD.count
+				/*
 				val error = evaluationRDD.map(tuple => {
 					if (tuple._1 == tuple._2) 0
 					else 1

@@ -24,12 +24,11 @@ object Evaluate {
 	 */
 	def predictEntry(	entry: (Int, (Array[Int], Int, Int, Int)), 
 						chainSet: RDD[Chain], 
-						classes: Array[String]) 
+						classes: Array[String],
+						attrib_vals: AttributeValues) 
 						: Int = {
 		
-		
-		val attributes = Array("number_words_title","attention", "rating", "engagement")
-		val attribute_values = chainSet.context.broadcast(new AttributeValues(attributes))
+		val attribute_values = StreamTreeLearning.sc.broadcast(attrib_vals)
 		logger.debug("chainSet size:" + chainSet.count)
 		val entry_bc = chainSet.context.broadcast(entry)
 		
