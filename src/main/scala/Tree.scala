@@ -58,26 +58,14 @@ object Tree {
 				
 			chainSet.filter(_.chain.length == i).foreach(chain => {
 				
-				
 				if (!chain.leaf) {
 					
 					val dataRDD2 = dataRDD_broadcast.value
-					try {
+
 					val attrs = StreamTreeLearning.sc.broadcast(chain.getAttributes)
 					
 					val possible_attributes = chain.getNextPossibleAttributes(attribute_values.value.attributes.toArray)
-					
-					try {
-						dataRDD2.count
-						} catch {
-												case e: Exception => {
-													println("ERRORR:" + dataRDD2)
-													e.printStackTrace()
-													true
-												}
-												}	
-				
-					
+	
 					// We filter data according to the attributes in the chain
 					val sampleRDD = dataRDD2.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})
 					sampleRDD.persist
@@ -104,15 +92,10 @@ object Tree {
 							// If this was the last attribute to split
 							if (possible_attributes.length==1) {
 								
-																		new_chain.leaf = true
+										new_chain.leaf = true
 										val attrs = StreamTreeLearning.sc.broadcast(Array((feature,value)))
 										
-											val value_data = sampleRDD.filter(entry => {
-												
-													attribute_values.value.checkEntryAttributesValues(entry, attrs.value)
-												
-											})									
-										
+										val value_data = sampleRDD.filter(entry => {attribute_values.value.checkEntryAttributesValues(entry, attrs.value)})									
 		
 										val feature_entries = sampleRDD.count
 		
@@ -124,9 +107,6 @@ object Tree {
 										val max = entries_count.maxBy(_._2)
 										if (max._2!=0)
 											new_chain.data_class = max._1
-									
-									
-								
 
 							} else {
 								// TODO: ?
@@ -141,12 +121,6 @@ object Tree {
 						j = j+1
 	
 					}
-					} catch {
-					case e: Exception => {
-						println("ERROR2: " + dataRDD2)
-						e.printStackTrace()
-					}
-				}
 					
 				}
 				
