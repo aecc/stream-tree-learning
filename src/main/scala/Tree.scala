@@ -17,7 +17,7 @@ import org.apache.log4j.Level
 object Tree {
 	
 	val logger = Logger.getLogger(getClass().getName());
-	logger.setLevel(Level.DEBUG)
+	logger.setLevel(Level.INFO)
 	
 	/*
 	 * Main function for the creation of the tree 
