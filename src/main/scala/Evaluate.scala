@@ -47,11 +47,11 @@ object Evaluate {
 		/*
 		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
 		 */
-		/*
+		
 		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
 		logger.debug("Number of coincidences in chains:" + classes.count)
 		logger.debug("Predicted class:" + classes.first)		
-		*/
+		
 		//TODO: fix!
 		if (classes.count == 0){
 			0
