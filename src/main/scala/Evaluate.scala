@@ -29,7 +29,7 @@ object Evaluate {
 						: Int = {
 		
 		val attribute_values = StreamTreeLearning.sc.broadcast(attrib_vals)
-		logger.debug("chainSet size:" + chainSet.count)
+		//logger.debug("chainSet size:" + chainSet.count)
 		//val entry_bc = StreamTreeLearning.sc.broadcast(entry)
 		
 		val classes = chainSet.map(chain => {
@@ -48,9 +48,9 @@ object Evaluate {
 		 * TODO: it can happen that the classes is empty for some reason, fix. Meanwhile random class assigned
 		 */
 		
-		logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
-		logger.debug("Number of coincidences in chains:" + classes.count)
-		logger.debug("Predicted class:" + classes.first)		
+		//logger.debug("Entry: (" + entry._2._1.mkString(",") + ")")
+		//logger.debug("Number of coincidences in chains:" + classes.count)
+		//logger.debug("Predicted class:" + classes.first)		
 		
 		//TODO: fix!
 		if (classes.count == 0){
