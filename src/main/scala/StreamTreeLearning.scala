@@ -92,23 +92,21 @@ object StreamTreeLearning {
 				if (bestRDD == null) {
 					bestRDD = treeRDD
 				} else {
-					val bestChainSet = sc.broadcast(treeRDD)
+					val bestChainSet = sc.broadcast(bestRDD)
 					val bestError = filteredRDD.map(entry => {
 									(entry._2._4, Evaluate.predictEntry(entry, bestChainSet.value, classes, attribute_values.value))
 									}).map(tuple => {
 									if (tuple._1 == tuple._2) 0
 									else 1
 									}).reduce(_+_).toDouble / filteredRDD.count
-					logger.info("The error with the best tree of the prediction is: " + error)
+					logger.info("The error of the prediction with the best tree is: " + error)
 					if (error < bestError) {
 						bestRDD = treeRDD
 						logger.info("A new tree has been set as the best one")
 					}
 				}
 
-				//filteredRDD.unpersist(false)
-				// TODO remove!
-				//ssc.stop
+				
 				rdd.context.parallelize(Array(error))
 			} else {
 				logger.info("No data. Nothing to do")
