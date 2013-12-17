@@ -21,7 +21,7 @@ while True:
         last_pos = fp.tell()
         for line in fp:
             try:
-                print(line)
+                print(line),
                 c.send(line)
                 time.sleep(2)
                 i=i+1
