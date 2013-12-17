@@ -31,7 +31,7 @@ object Evaluate {
 		val attribute_values = StreamTreeLearning.sc.broadcast(attrib_vals)
 		logger.debug("chainSet size:" + chainSet.count)
 		//val entry_bc = StreamTreeLearning.sc.broadcast(entry)
-		
+		/*
 		val classes = chainSet.map(chain => {
 			
 			val attribute_vals = attribute_values.value
@@ -57,8 +57,8 @@ object Evaluate {
 		} else {
 			classes.first
 		}
-		
-		
+		*/
+		0
 		
 	}
 }
