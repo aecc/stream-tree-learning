@@ -20,12 +20,10 @@ while True:
     with open('../files/redditSubmissions-sorted-date.csv') as fp:
         last_pos = fp.tell()
         for line in fp:
-            if i>2:
-                i=0
-                time.sleep(1)
-                print('New chunk sent')
             try:
+                print(line)
                 c.send(line)
+                time.sleep(2)
                 i=i+1
             except socket.error, e:
                 print('Client disconnected\n')
