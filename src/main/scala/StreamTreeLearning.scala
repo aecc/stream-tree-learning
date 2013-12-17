@@ -39,6 +39,10 @@ object StreamTreeLearning {
 		val attributes = Array("number_words_title","attention", "rating", "engagement")
 		val classes = Array("Reposted_Less_Than_K","Reposted_More_Equal_Than_K")
 		
+		// Best tree built so far
+		var bestRDD : RDD[Chain] = null
+		var bestError : Double = 1.0
+		
 		val attribute_values = StreamTreeLearning.sc.broadcast(new AttributeValues(attributes))
 		
 		// External data structure to save reposts per image_id
@@ -83,7 +87,25 @@ object StreamTreeLearning {
 				
 				logger.info("Finished the evaluation part [4/4]")
 				logger.info("The error of the prediction is: " + error)
-		
+				
+				// We choose the best tree
+				if (bestRDD == null) {
+					bestRDD = treeRDD
+				} else {
+					val bestChainSet = sc.broadcast(treeRDD)
+					val bestError = filteredRDD.map(entry => {
+									(entry._2._4, Evaluate.predictEntry(entry, bestChainSet.value, classes, attribute_values.value))
+									}).map(tuple => {
+									if (tuple._1 == tuple._2) 0
+									else 1
+									}).reduce(_+_).toDouble / filteredRDD.count
+					logger.info("The error with the best tree of the prediction is: " + error)
+					if (error < bestError) {
+						bestRDD = treeRDD
+						logger.info("A new tree has been set as the best one")
+					}
+				}
+
 				//filteredRDD.unpersist(false)
 				// TODO remove!
 				//ssc.stop
@@ -93,15 +115,6 @@ object StreamTreeLearning {
 				rdd.context.parallelize(Array(1.0))
 			}
 		})
-		
-		// TODO: remove
-		/*
-		val reduced_dstream = filtered.filter({ 
-			case (id,(_,_,_,_)) => { 
-				if (id==710455) true else false 
-			} 
-		}).print
-		*/
 
 		filtered.print
 		
