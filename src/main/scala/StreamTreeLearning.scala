@@ -53,6 +53,8 @@ object StreamTreeLearning {
 		// TODO: Change to DStream
 		// Transform the RDDs coming from the stream using the following process
 		val filtered = reddits_stream.transform(rdd => {
+			
+			logger.info("***************** NEW RDD *****************")
 			logger.info("Number of entries in this RDD: " + rdd.count)
 			if (rdd.count != 0) {
 								
