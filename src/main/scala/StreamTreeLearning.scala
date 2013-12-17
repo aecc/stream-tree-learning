@@ -99,7 +99,7 @@ object StreamTreeLearning {
 									if (tuple._1 == tuple._2) 0
 									else 1
 									}).reduce(_+_).toDouble / filteredRDD.count
-					logger.info("The error of the prediction with the best tree is: " + error)
+					logger.info("The error of the prediction with the best tree is: " + bestError)
 					if (error < bestError) {
 						bestRDD = treeRDD
 						logger.info("A new tree has been set as the best one")
